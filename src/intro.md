@@ -1,7 +1,7 @@
 ---
-icon: info
+icon: profile
 ---
 
-# Intro Page
+# 个人介绍
 
-Place your introduction and profile here.
+完了再说
