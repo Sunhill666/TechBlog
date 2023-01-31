@@ -13,6 +13,7 @@ export default hopeTheme({
   iconAssets: "iconfont",
 
   logo: "/logo.svg",
+  logoDark: "/logo-dark.svg",
 
   repo: "Sunhill666/TechBlog",
 

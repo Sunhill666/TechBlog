@@ -4,6 +4,7 @@ layout: BlogHome
 icon: home
 title: 主页
 heroImage: /logo.svg
+heroImageDark: /logo-dark.svg
 heroText: 荒地
 heroFullScreen: true
 tagline: 在荒地产出知识
