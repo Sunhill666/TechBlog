@@ -2,9 +2,15 @@ lockfileVersion: 5.4
 
 specifiers:
   '@vuepress/client': 2.0.0-beta.60
+  markdown-it-multimd-table: ^4.2.0
+  markdown-it-plantuml: ^1.4.1
   vue: ^3.2.45
   vuepress: 2.0.0-beta.60
   vuepress-theme-hope: 2.0.0-beta.165
+
+dependencies:
+  markdown-it-multimd-table: 4.2.0
+  markdown-it-plantuml: 1.4.1
 
 devDependencies:
   '@vuepress/client': 2.0.0-beta.60
@@ -3976,6 +3982,14 @@ packages:
   /markdown-it-emoji/2.0.2:
     resolution: {integrity: sha512-zLftSaNrKuYl0kR5zm4gxXjHaOI3FAOEaloKmRA5hijmJZvSjmxcokOLlzycb/HXlUFWzXqpIEoyEMCE4i9MvQ==}
     dev: true
+
+  /markdown-it-multimd-table/4.2.0:
+    resolution: {integrity: sha512-wFpb8TSQ9josQrAlOg1toEAHHSGYQZ4krBKfpejPQ+lq3oudnxCNW4S6gYMcRbkrtrfX/ND2njr4belnKt3fBg==}
+    dev: false
+
+  /markdown-it-plantuml/1.4.1:
+    resolution: {integrity: sha512-13KgnZaGYTHBp4iUmGofzZSBz+Zj6cyqfR0SXUIc9wgWTto5Xhn7NjaXYxY0z7uBeTUMlc9LMQq5uP4OM5xCHg==}
+    dev: false
 
   /markdown-it/13.0.1:
     resolution: {integrity: sha512-lTlxriVoy2criHP0JKRhO2VDG9c2ypWCsT237eDiLqi09rmbKoUetyGHq2uOIRoRS//kfoJckS0eUzzkDR+k2Q==}

@@ -9,4 +9,5 @@ export const zhSidebar = sidebar({
   "/notes/": "structure",
   "/tutorials/": "structure",
   "/impressions/": "structure",
+  "/YeeOnlineJudge/": "structure"
 });
