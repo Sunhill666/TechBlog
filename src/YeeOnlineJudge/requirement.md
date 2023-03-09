@@ -120,143 +120,211 @@ stop
 
 @startuml
 !theme materia-outline
-object User {
-    用户ID
-    用户名
-    密码
-    名
-    姓
-    电子邮件
-    是否为工作人员
-    是否激活
-    加入日期
-    最后登录时间
-    是否超级管理员
-    用户角色
-    用户管理员权限
-    解决的问题
-    所属班级
-    头像
-    提交量
-    正确量
-    解决量
+object Group{
+    组名
 }
 
-object Classes{
-    班级名
+package 用户 {
+    object User {
+        工号/学号
+        密码
+        昵称
+        是否工作人员
+        是否启用
+        是否超级管理员
+        真名
+        电子邮件
+        用户角色
+        用户权限
+        加入时间
+        最后登陆时间
+        最后登陆IP
+    }
+
+    object UserProfile {
+        用户
+        组
+        题目数据
+        头像
+        格言
+    }
+
+    map UserRole {
+        TEC => 老师
+        STU => 学生
+    }
+
+    map Permission {
+        NONE => 无权限
+        SELF => 个人权限
+        ALL => 所有权限
+    }
 }
 
-object Problem {
-    题目名称
+package 题目 {
+    object Problem {
+        题目标题
+        题目描述
+        输入描述
+        输出描述
+        输入输出样例
+        模版
+        提示
+        可提交的语言
+        时间限制
+        内存限制
+        难度
+        模式
+        测试样例
+        分数
+        前台用户是否可见
+        题目标签
+        题源
+        工作人员是否可见
+        创建时间
+        最后更新时间
+        题目数据
+        创建者
+    }
+
+    object ProblemTag {
+        标签名称
+    }
+
+    object TestCase {
+        测试样例文件
+        创建日期
+        测试样例结构
+    }
+
+    map Difficulty {
+        Easy => 简单
+        Medium => 中等
+        Hard => 困难
+    }
+}
+
+package 提交 {
+    object Submission {
+        提交题目
+        每个测试样例提交到 Judge0 的 Token
+        提交代码
+        提交语言ID
+        比赛或练习ID
+        提交状态
+        提交时间
+        提交者
+        提交IP
+    }
+
+    map Status {
+        In Queue => 队列中
+        Processing => 运行中
+        Accepted => 正确
+        Wrong Answer => 答案错误
+        Time Limit Exceeded => 超时
+        Compilation Error => 编译错误
+        Runtime Error => 运行错误
+        Internal Error => 内部错误
+        Exec Format Error => 运行格式错误
+    }
+}
+
+object ProblemSet {
+    题集名称
+    题集所包含题目
+}
+
+object TrainingBase {
+    标题
+    描述
     创建时间
-    最后更新时间
-    标签
+    是否开启
     创建者
-    输入描述
-    输出描述
-    输入输出样例
-    提示
-    题源
-    问题所支持语言
-    代码模板
-    时间限制
-    内存限制
-    被提交量
-    被通过量
-    题目数据
-    难度
-    是否公开
-    是否可见
+}
+
+object Training {
+    起始时间
+    结束时间
+    题目
+    模式
+    可参加的组
+    可参加的用户
+    密码
+}
+
+object LearningPlan {
+    阶段
+    顺序
+}
+
+object TrainingRank {
+    用户
+    比赛
+    数据
 }
 
 object Announcement {
     标题
     内容
     创建时间
-    最后更新时间
+    最后更新日期
+    比赛
     创建者
     是否可见
 }
 
-object ContestAnnouncement {
-    竞赛
+map Mode {
+    OI => OI 模式
+    ACM => ACM 模式
 }
 
-object JudgeServer {
-    主机名
-    IP
-    版本
-    CPU核心
-    内存使用量
-    CPU使用量
-    最后心跳时间
-    创建时间
-    任务数量
-    服务地址
-    是否启用
-}
+diamond 创建者
+diamond 引用题目
+diamond 引用比赛
+diamond 模式
 
-object Contest {
-    标题
-    描述
-    密码
-    开始时间
-    结束时间
-    创建时间
-    最后更新时间
-    创建者
-    是否可见
-    允许IP范围
-}
+Group *-- 用户 : 1-n
 
-object Rank {
-    用户
-    竞赛
-    提交量
-    正确量
-    用时
-    提交信息
-}
-
-map UserRole {
-    TEC => 老师
-    STU => 学生
-}
-
-map UserAdmin {
-    RU => 普通用户
-    AM => 管理员
-    SA => 超级管理员
-}
-
-map Difficulty {
-    Easy => 简单
-    Medium => 中等
-    Hard => 困难
-}
-
-map OJLanguage {
-    Python2 => Python2
-    Python => Python
-    C => C
-    C++ => C++
-    Java => Java
-    GoLang => GoLang
-    JavaScript => JavaScript
-}
-
-Classes o-- User : 所属
 User::用户角色 ..> UserRole
-User::用户管理员权限 ..> UserAdmin
-Problem::创建者 --> User
-Problem::问题所支持语言 ..> OJLanguage
+User::用户权限 ..> Permission
+UserProfile::用户 --> User : 1-1
+
 Problem::难度 ..> Difficulty
-Announcement::创建者 --> User
-Contest::创建者 -->  User
-Announcement <|-- ContestAnnouncement
-Contest *-- ContestAnnouncement : 所属
-Rank::用户 --> User
-Rank::竞赛 --> Contest
+Problem::模式 ..> 模式
+Problem::测试样例 --> TestCase : 1-n
+Problem::题目标签 --> ProblemTag : n-n
+Problem::创建者 --> 创建者
+
+ProblemSet --> 引用题目 : n-n
+
+TrainingBase::创建者 --> 创建者
+
+Training --|> TrainingBase
+Training --> 引用题目 : n-n
+Training::模式 ..> 模式
+Training::可参加的组 ..> Group
+Training::可参加的用户 ..> 创建者
+
+LearningPlan --|> TrainingBase
+LearningPlan o-- ProblemSet : n-n
+
+TrainingRank::用户 ..> 引用比赛
+TrainingRank::比赛 ..> Training
+
+Submission::提交题目 --> 引用题目
+Submission::比赛或练习ID ..> 引用比赛
+Submission::提交状态 ..> Status
+提交 --> 创建者
+
+Announcement::比赛 ..> 引用比赛
+Announcement::创建者 --> 创建者
+
+创建者 --> 用户
+引用题目 --> 题目
+引用比赛 --> Training
+模式 --> Mode
+
 @enduml
 
 ### 用例图

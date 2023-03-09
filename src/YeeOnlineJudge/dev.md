@@ -52,18 +52,19 @@ pip install -r requirements.txt
 
 ##### User 模型 （*继承 `AbstractBaseUser` 类*）
 
-| 字段名称        | 字段类型      | 字段说明       |
-| --------------- | ------------- | -------------- |
-| username        | CharField     | 工号/学号      |
-| nickname        | CharField     | 昵称           |
-| is_staff        | BooleanField  | 是否工作人员   |
-| is_active       | BooleanField  | 是否启用       |
-| is_superuser    | BooleanField  | 是否超级管理员 |
-| first_name      | CharField     | 名             |
-| email           | EmailField    | 姓             |
-| user_role       | CharField     | 用户角色       |
-| user_permission | CharField     | 用户权限       |
-| date_joined     | DateTimeField | 加入时间       |
+| 字段名称        | 字段类型              | 字段说明       |
+| --------------- | --------------------- | -------------- |
+| username        | CharField             | 工号/学号      |
+| nickname        | CharField             | 昵称           |
+| is_staff        | BooleanField          | 是否工作人员   |
+| is_active       | BooleanField          | 是否启用       |
+| is_superuser    | BooleanField          | 是否超级管理员 |
+| real_name       | CharField             | 真名           |
+| email           | EmailField            | 电子邮件       |
+| user_role       | CharField             | 用户角色       |
+| user_permission | CharField             | 用户权限       |
+| date_joined     | DateTimeField         | 加入时间       |
+| last_login_ip   | GenericIPAddressField | 最后登陆IP     |
 
 ##### UserProfile 模型
 
@@ -130,6 +131,10 @@ pip install -r requirements.txt
 
 #### 模型设计
 
+| 模型       | 描述 |
+| ---------- | ---- |
+| Submission | 提交 |
+
 ##### Submission 模型
 
 | 字段名称     | 字段类型              | 字段说明                           |
@@ -147,6 +152,14 @@ pip install -r requirements.txt
 ### training 模块
 
 #### 模型设计
+
+| 模型         | 描述                   |
+| ------------ | ---------------------- |
+| ProblemSet   | 题集                   |
+| TrainingBase | 比赛训练基类（抽象类） |
+| Training     | 比赛训练               |
+| LearningPlan | 学习计划               |
+| TrainingRank | 比赛训练排名           |
 
 ##### ProblemSet 模型
 
@@ -179,31 +192,35 @@ pip install -r requirements.txt
 
 ##### LearningPlan 模型 （*继承 `TrainingBase` 类*）
 
-| 字段名称   | 字段类型        | 字段说明     |
-| ---------- | --------------- | ------------ |
-| stage | ManyToManyField   | 阶段     |
-| ordering   | JSONField   | 顺序     |
+| 字段名称 | 字段类型        | 字段说明 |
+| -------- | --------------- | -------- |
+| stage    | ManyToManyField | 阶段     |
+| ordering | JSONField       | 顺序     |
 
 ##### TrainingRank 模型
 
-| 字段名称   | 字段类型        | 字段说明     |
-| ---------- | --------------- | ------------ |
-| user | ForeignKey   | 用户     |
-| training   | ForeignKey   | 比赛     |
-| statistics   | JSONField   | 数据     |
+| 字段名称   | 字段类型   | 字段说明 |
+| ---------- | ---------- | -------- |
+| user       | ForeignKey | 用户     |
+| training   | ForeignKey | 比赛     |
+| statistics | JSONField  | 数据     |
 
 ### announcement 模块
 
 #### 模型设计
 
+| 模型         | 描述 |
+| ------------ | ---- |
+| Announcement | 公告 |
+
 ##### Announcement 模型
 
-| 字段名称   | 字段类型        | 字段说明     |
-| ---------- | --------------- | ------------ |
-| title | CharField   | 题目     |
-| content   | TextField   | 内容     |
-| created_time   | DateTimeField   | 创建时间     |
-| last_update_time   | DateTimeField   | 最后更新日期     |
-| training   | ForeignKey   | 比赛     |
-| created_by   | ForeignKey   | 创建者     |
-| visible   | BooleanField   | 是否可见     |
+| 字段名称         | 字段类型      | 字段说明     |
+| ---------------- | ------------- | ------------ |
+| title            | CharField     | 标题         |
+| content          | TextField     | 内容         |
+| created_time     | DateTimeField | 创建时间     |
+| last_update_time | DateTimeField | 最后更新日期 |
+| training         | ForeignKey    | 比赛         |
+| created_by       | ForeignKey    | 创建者       |
+| visible          | BooleanField  | 是否可见     |
