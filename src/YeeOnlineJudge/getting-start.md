@@ -116,6 +116,14 @@ article: true
     AUTHZ_TOKEN=
     ```
 
+    （可选）文档作为首页
+    ```text
+    # If true the documentation page will be used as a homepage, otherwise, the
+    # homepage will be empty. You can always access the documentation page via /docs.
+    # Default: false
+    USE_DOCS_AS_HOMEPAGE=true
+    ```
+
     其他可依据个人自行配置
 
 3. 运行判题机服务并等待片刻使判题机初始化
@@ -126,6 +134,8 @@ article: true
     docker-compose up -d
     sleep 5s
     ```
+
+4. 运行成功后判题机默认监听 `http://<your-server-ip-address>:2358`，访问 `http://<your-server-ip-address>` 查看判题机文档
 
 ### YeeOnlineJudge 后端部署
 
@@ -197,3 +207,8 @@ article: true
     # 启动 Celery
     Celery -A YeeOnlineJudge worker -l INFO
     ```
+
+7. 启动成功后服务端监听 `http://<your-server-ip-address>:8000`
+
+
+## 结束
