@@ -11,6 +11,8 @@ article: true
 ## 项目依赖
 
 ```shell
+Python 3.9.15
+
 # requirements.txt
 
 celery==5.2.7
@@ -75,6 +77,74 @@ pip install -r requirements.txt
 | statistics | JSONField     | 题目数据   |
 | avatar     | ImageField    | 头像       |
 | bio        | CharField     | 格言       |
+
+#### 功能设计
+
+organization 模块主要负责：
+1. 组（班级）管理
+2. 用户管理
+3. 用户资料管理
+4. 认证与鉴权
+
+在认证与鉴权方面，继承 Django 的 `AbstractBaseUser` 类，参照 Django 的 `AbstractUser` 类，更改与添加一些用户属性来更好的契合系统，继承 Django 的 `BaseUserManager`，自定义 UserManager
+
+``` python
+# organization.models
+class CustomUserManager(BaseUserManager):
+    def _create_user(self, username, email, password, **extra_fields):
+        if not username:
+            raise ValueError('The given username must be set')
+        email = self.normalize_email(email)
+        user = self.model(username=username, email=email, **extra_fields)
+        user.password = make_password(password)
+        user.save()
+        return user
+
+    def create_user(self, username, email=None, password=None, **extra_fields):
+        if extra_fields.get('user_role', None) == 'TEC':
+            extra_fields.setdefault('is_staff', True)
+            extra_fields.setdefault('user_permission', 'SELF')
+        else:
+            extra_fields.setdefault('user_role', 'STU')
+            extra_fields.setdefault('is_staff', False)
+            extra_fields.setdefault('user_permission', 'NONE')
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(username, email, password, **extra_fields)
+
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
+        extra_fields.setdefault('user_role', 'TEC')
+        extra_fields.setdefault('user_permission', 'ALL')
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+        return self._create_user(username, email, password, **extra_fields)
+```
+
+继承 Simple JWT 的 `TokenObtainPairView` 类，重写 `post` 方法来记录用户最后一次登录的IP地址，在顶层 urlpatterns 使用该类来完成认证与鉴权
+
+```python
+# organization.views.admin
+class MyTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        resp = super().post(request, *args, **kwargs)
+        user = User.objects.get(username=request.data.get('username'))
+        if x_forwarded_for := request.META.get('HTTP_X_FORWARDED_FOR'):
+            user.last_login_ip = x_forwarded_for.split(',')[0]
+        else:
+            user.last_login_ip = request.META.get('REMOTE_ADDR')
+        user.save()
+        return resp
+
+
+# YeeOnlineJudge.urls
+urlpatterns = [
+    ...
+    path('api/login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+]
+```
 
 ### problem 模块
 

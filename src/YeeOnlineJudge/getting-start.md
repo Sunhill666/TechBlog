@@ -4,95 +4,196 @@ icon: repo
 article: true
 ---
 
+## 准备工作
 
-## 判题机部署
+安装 [Docker Engine](https://docs.docker.com/engine/install/) 或 [Docker Desktop](https://docs.docker.com/engine/install/)
 
-使用[judge0](https://github.com/judge0/judge0)作为本项目的判题机，具体部署可前去该项目的[Release](https://github.com/judge0/judge0/releases)页查看
+## Docker Compose 部署（推荐）
 
-## YeeOnlineJudge后端部署
+稍后补充
 
-### 本地部署
+## 手动部署
 
-1. Clone项目到本地
+### 部署判题机
+
+1. 下载并解压判题机 Compose 文件
+
+    ```shell
+    wget https://github.com/judge0/judge0/releases/download/v1.13.0/judge0-v1.13.0.zip
+    unzip judge0-v1.13.0.zip
+    ```
+
+2. 修改配置文件
+
+    ```shell
+    cd judge0-v1.13.0
+    vim judge0.conf
+    ```
+    
+    修改数据库和 Redis 配置
+
+    ```text
+    ################################################################################
+    # Redis Configuration
+    ################################################################################
+    # Specify Redis host
+    # Default: localhost
+    REDIS_HOST=redis
+
+    # Specify Redis port.
+    # Default: 6379
+    REDIS_PORT=
+
+    # Specify Redis password. Cannot be blank.
+    # Default: NO DEFAULT! MUST BE SET!
+    REDIS_PASSWORD=<your-redis-password>
+
+    ################################################################################
+    # PostgreSQL Configuration
+    ################################################################################
+    # Specify Postgres host.
+    # Default: localhost
+    POSTGRES_HOST=db
+
+    # Specify Postgres port.
+    # Default: 5432
+    POSTGRES_PORT=
+
+    # Name of the database to use. Used only in production.
+    # Default: postgres
+    POSTGRES_DB=judge0
+
+    # User who can access this database. Used only in production.
+    # Default: postgres
+    POSTGRES_USER=judge0
+
+    # Password of the user. Cannot be blank. Used only in production.
+    # Default: NO DEFAULT, YOU MUST SET YOUR PASSWORD
+    POSTGRES_PASSWORD=<DB-password>
+    ```
+
+    （可选）修改认证授权配置
+
+    ```text
+    ################################################################################
+    # Judge0 Authentication Configuration
+    ################################################################################
+    # You can protect your API with (AUTHN_HEADER, AUTHN_TOKEN) pair.
+    # Each request then needs to have this pair either in headers or
+    # query parameters. For example let AUTHN_HEADER=X-Judge0-Token and
+    # AUTHN_TOKEN=mySecretToken. Then user should authenticate by sending this
+    # in headers or query parameters in each request, e.g.:
+    # https://api.judge0.com/system_info?X-Judge0-Token=mySecretToken
+
+    # Specify authentication header name.
+    # Default: X-Auth-Token
+    AUTHN_HEADER=
+
+    # Specify valid authentication tokens.
+    # Default: empty - authentication is disabled
+    AUTHN_TOKEN=
+
+
+    ################################################################################
+    # Judge0 Authorization Configuration
+    ################################################################################
+    # Protected API calls can be issued with (AUTHZ_HEADER, AUTHZ_TOKEN) pair.
+    # To see exactly which API calls are protected with authorization tokens
+    # please read the docs at https://api.judge0.com.
+    # API authorization ensures that only specified users call protected API calls.
+    # For example let AUTHZ_HEADER=X-Judge0-User and AUTHZ_TOKEN=mySecretToken.
+    # Then user should authorize be sending this in headers or query parameters in
+    # each request, e.g.: https://api.judge0.com/system_info?X-Judge0-User=mySecretToken
+    # Note that if you enabled authentication, then user should also send valid
+    # authentication token.
+
+    # Specify authorization header name.
+    # Default: X-Auth-User
+    AUTHZ_HEADER=
+
+    # Specify valid authorization tokens.
+    # Default: empty - authorization is disabled, protected API calls cannot be issued
+    AUTHZ_TOKEN=
+    ```
+
+    其他可依据个人自行配置
+
+3. 运行判题机服务并等待片刻使判题机初始化
+
+    ```shell
+    docker-compose up -d db redis
+    sleep 10s
+    docker-compose up -d
+    sleep 5s
+    ```
+
+### YeeOnlineJudge 后端部署
+
+1. Clone 项目到本地并切换分支
 
     ```shell
     git clone https://github.com/Sunhill666/YeeOnlineJudge.git
-    ```
-
-2. 移步至项目文件夹
-
-    ```shell
     cd ./YeeOnlineJudge
+    git checkout -b alpha origin/alpha
     ```
 
-3. 安装 & 使用 Virtualenv 创建虚拟环境并激活（下以Linux端为例）
+2. 安装依赖
 
     ```shell
-    python -m venv ./venv
-    source ./venv/bin/active
-    apt install libpq-dev
     pip install -r requirements.txt
     ```
 
-4. 修改开发环境和生产环境
+3. 使用 Docker 运行 PostgreSQL 和 Redis
 
     ```shell
-    # 开发坏境
-    vim ./YeeOnlineJudge/dev_settings.py
-
-    # 生产环境
-    vim ./YeeOnlineJudge/prod_settings.py
+    docker run --env=POSTGRES_USER=<db-user> \
+                --env=POSTGRES_PASSWORD=<db-password> \
+                --env=POSTGRES_DB=<db-name> \
+                --volume=<your-db-data-volume>:/var/lib/postgresql/data \
+                --name=<container_name> \
+                -p <db-port>:5432 \
+                -itd postgres:14.5-alpine
+    docker run --volume=<your-redis-data-volume>:/data \
+                -p <redis-port>:6379 \
+                -itd redis:7.0-alpine --requirepass "<redis-password>"
     ```
 
-5. 启动服务
+4. 修改项目设置
 
     ```shell
+    vim YeeOnlineJudge/settings.py
+    ```
+
+5. 配置环境变量
+
+    ```text
+    AUTHN_HEADER=<judge0-AUTHN_HEADER>
+    AUTHN_TOKEN=<judge0-AUTHN_TOKEN>
+    AUTHZ_HEADER=<judge0-AUTHZ_HEADER>
+    AUTHZ_TOKEN=<judge0-AUTHZ_TOKEN>
+    CURRENT_ENV=prod
+    DJANGO_SETTINGS_MODULE=YeeOnlineJudge.settings
+    JUDGE_HOST=<JUDGE_HOST>
+    JUDGE_PORT=<JUDGE_PORT>
+    JUDGE_SSL=true # 是否使用 https 与判题机通信
+    POSTGRES_DB=<db-name>
+    POSTGRES_HOST=<db-host>
+    POSTGRES_PASSWORD=<db-password>
+    POSTGRES_PORT=<db-port>
+    POSTGRES_USER=<db-user>
+    REDIS_HOST=<redis-host>
+    REDIS_PORT=<redis-port>
+    REDIS_PASSWORD=<redis-password>
+    ```
+
+6. 启动服务
+
+    ```shell
+    # 启动 Django
     python manage.py makemigrations && python manage.py migrate
     python manage.py inital_user
     python manage.py runserver 0.0.0.0:8000
-    ```
 
-### Docker-compose 部署
-
-1. 下载解压
-
-    ```shell
-    wget https://github.com/Sunhill666/YeeOnlineJudge/releases/download/0.0.1-220818-alpha/0.0.1-220818-alpha.zip
-    unzip -d ./YeeOJ 0.0.1-220818-alpha.zip
-    ```
-
-2. 修改环境变量
-
-    ```shell
-    cd ./YeeOJ
-    vim oj.env
-    ```
-
-3. 部署
-
-    ```shell
-    docker-compose up -d
-    ```
-
-### 坏境变量
-
-- `oj.env` 说明
-
-    ```shell
-    CURRENT_ENV=dev # 部署环境
-    POSTGRES_USER=oj_admin # 数据库用户
-    POSTGRES_PASSWORD=ojoj_admin123 # 数据库密码
-    POSTGRES_DB=oj_db # 数据库名称
-    POSTGRES_HOST=judge_db # 数据库地址
-    POSTGRES_PORT=5432 # 数据库端口
-    CELERY_REDIS_HOST=redis://:judgeme_114514!@judge_redis:6379/
-    REDIS_HOST=redis://judge_redis:6379/
-    REDIS_PASSWORD=judgeme_114514!
-    AUTHN_HEADER=X-Auth-Token
-    AUTHN_TOKEN=neon-genesis-evangelion
-    AUTHZ_HEADER=X-Auth-User
-    AUTHZ_TOKEN=asuka-langley-soryu
-    JUDGE_HOST=oj.moorlands.cn
-    JUDGE_PORT=443
-    JUDGE_SSL=true
+    # 启动 Celery
+    Celery -A YeeOnlineJudge worker -l INFO
     ```
