@@ -16,5 +16,5 @@ projects:
     desc: 一个基于 Django 和 judge0 的 OnlineJudge
     link: https://github.com/Sunhill666/YeeOnlineJudge
 
-footer: El Psy Congroo.
+footer: true
 ---

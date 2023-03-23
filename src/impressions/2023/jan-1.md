@@ -1,6 +1,6 @@
 ---
 title: 这个博客的诞生
-date: 2023-1-31
+date: 2023-01-31
 category:
   - 创世纪
 tag:

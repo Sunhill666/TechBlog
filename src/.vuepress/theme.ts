@@ -35,13 +35,22 @@ export default hopeTheme({
     },
   },
 
+  themeColor: {
+    blue: "#096dd9",
+    red: "#f26d6d",
+    green: "#3eaf7c",
+    orange: "#fb9b5f",
+  },
+
+  displayFooter: true,
+
   locales: {
     "/": {
       navbar: zhNavbar,
       sidebar: zhSidebar,
 
-      footer: "El Psy Congroo.",
-      copyright: '<a href="https://github.com/Sunhill666/TechBlog/blob/main/LICENSE">Copyright © 2023 Sunhill666 | MIT License</a>',
+      footer: 'El Psy Congroo. | <a href="https://beian.miit.gov.cn/" target="_blank">蒙ICP备2020003520号-1</a>',
+      copyright: '<a href="https://github.com/Sunhill666/TechBlog/blob/master/LICENSE">Copyright © 2023 Sunhill666 | MIT License</a>',
 
       displayFooter: true,
 

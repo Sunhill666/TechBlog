@@ -34,6 +34,6 @@ export const zhNavbar = navbar([
       },
     ]
   },
-  { text: "随想", icon: "creative", link: "/impressions/" },
+  { text: "随想", icon: "creative", link: "/impressions/README.md" },
   { text: "YeeOnlineJudge", icon: "", link: "/YeeOnlineJudge/"},
 ]);
