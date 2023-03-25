@@ -818,6 +818,94 @@ GET http://127.0.0.1:8000/api/train/training/1/
 
 :::
 
+::: info 比赛排名 - IsAuthenticated
+
+`/api/train/rank/{training_id}/` `GET`
+
+::: details 接口使用
+
+获取该训练比赛的排名情况。
+
+```text
+GET http://127.0.0.1:8000/api/train/rank/1/
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "user": "root admin",
+            "statistics": {
+                "25": {
+                    "0": true,
+                    "1": true
+                },
+                "score": 200,
+                "statistics": {
+                    "Commit": 1,
+                    "Accepted": 1,
+                    "In Queue": 0,
+                    "Processing": 0,
+                    "Wrong Answer": 0,
+                    "Runtime Error": 0,
+                    "Internal Error": 0,
+                    "Compilation Error": 0,
+                    "Exec Format Error": 0,
+                    "Time Limit Exceeded": 0
+                }
+            },
+            "training": 1
+        }
+    ]
+}
+```
+
+:::
+
+::: info 比赛提交列表 - IsAuthenticated
+
+`/api/train/sub/{training_id}/` `GET`
+
+::: details 接口使用
+
+获取该训练比赛的提交情况。
+
+```text
+GET http://127.0.0.1:8000/api/train/sub/1/
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "created_by": "root admin",
+            "language_id": 71,
+            "status": "Accepted",
+            "created_time": "2023-03-24T22:06:42.013440",
+            "problem": {
+                "id": 25,
+                "title": "靶形数独"
+            },
+            "training": 1
+        }
+    ]
+}
+```
+
+:::
+
 #### 学习计划
 
 ### Submission

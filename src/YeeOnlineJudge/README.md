@@ -1,6 +1,6 @@
 ---
 title: YeeOnlineJudge 文档首页
-icon: repo
+icon: read
 article: false
 ---
 

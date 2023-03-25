@@ -1,6 +1,6 @@
 ---
 title: YeeOnlineJudge Getting Start
-icon: repo
+icon: guide
 article: true
 ---
 

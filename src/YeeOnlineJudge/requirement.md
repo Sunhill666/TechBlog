@@ -1,6 +1,6 @@
 ---
-title: YeeOnlineJudge 项目需求文档
-icon: repo
+title: YeeOnlineJudge 需求文档
+icon: result
 article: true
 ---
 

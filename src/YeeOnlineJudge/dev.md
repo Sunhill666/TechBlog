@@ -1,6 +1,6 @@
 ---
-title: YeeOnlineJudge 项目开发文档
-icon: repo
+title: YeeOnlineJudge 开发文档
+icon: tool
 article: true
 ---
 

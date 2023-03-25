@@ -74,6 +74,7 @@ export default hopeTheme({
       repoId: "R_kgDOI30wXA",
       category: "Announcements",
       categoryId: "DIC_kwDOI30wXM4CT56A",
+      mapping: "title"
     },
 
     // Disable features you don’t want here
