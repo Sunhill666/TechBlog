@@ -398,7 +398,7 @@ PATCH http://127.0.0.1:8000/api/org/user/1234567890000/
 
 ::: details 接口使用
 
-获取用户排名。
+通过请求来获取用户排名。
 
 ```text
 GET http://127.0.0.1:8000/api/org/rank/
@@ -459,11 +459,13 @@ GET http://127.0.0.1:8000/api/org/rank/
 
 #### 组（班级）
 
-::: info 查看组（班级） - AllowAny
+::: info 查看组（班级）详情 - AllowAny
 
 `/api/org/group/{id}/` `GET`
 
 ::: details 接口使用
+
+使用 Group 的 `id` 来获取组（班级）详情。
 
 ```text
 GET http://127.0.0.1:8000/api/org/group/2/
@@ -479,10 +481,7 @@ GET http://127.0.0.1:8000/api/org/group/2/
             "user": "1234567890000",
             "avatar": "http://127.0.0.1:8000/media/avatar/default.jpg"
         },
-        {
-            "user": "1234567890001",
-            "avatar": "http://127.0.0.1:8000/media/avatar/default.jpg"
-        }
+        ...
     ],
     "name": "test"
 }
@@ -499,6 +498,8 @@ GET http://127.0.0.1:8000/api/org/group/2/
 `/api/prm/problem/` `GET`
 
 ::: details 接口使用
+
+通过请求来获取题目列表。
 
 **Query Parameter 支持参数**
 
@@ -544,6 +545,7 @@ GET http://127.0.0.1:8000/api/org/group/2/
             },
             "done": -1 // 是否做过：1 做对；0 做错；-1 没做过
         },
+        ...
     ]
 }
 ```
@@ -555,6 +557,8 @@ GET http://127.0.0.1:8000/api/org/group/2/
 `/api/prm/problem/{id}/` `GET`
 
 ::: details 接口使用
+
+使用 Problem 的 `id` 来获取题目详情。
 
 ```text
 GET http://127.0.0.1:8000/api/prm/problem/1/
@@ -638,6 +642,8 @@ GET http://127.0.0.1:8000/api/prm/problem/1/
 
 ::: details 接口使用
 
+通过请求来获取题目标签列表。
+
 成功返回 `200 OK` 。
 
 ```json
@@ -646,10 +652,7 @@ GET http://127.0.0.1:8000/api/prm/problem/1/
         "id": 2,
         "tag_name": "Test"
     },
-    {
-        "id": 1,
-        "tag_name": "入门"
-    }
+    ...
 ]
 ```
 
@@ -660,6 +663,8 @@ GET http://127.0.0.1:8000/api/prm/problem/1/
 `/api/prm/tag/{id}/` `GET`
 
 ::: details 接口使用
+
+使用 ProblemTag 的 `id` 来获取题目标签详情。
 
 ```text
 GET http://127.0.0.1:8000/api/prm/tag/1/
@@ -685,6 +690,8 @@ GET http://127.0.0.1:8000/api/prm/tag/1/
 `/api/train/training/` `GET`
 
 ::: details 接口使用
+
+通过请求来获取比赛练习列表。
 
 **Query Parameter 支持参数**
 
@@ -724,7 +731,8 @@ GET http://127.0.0.1:8000/api/prm/tag/1/
             ],
             "group": [], // 可免验证参加的组（班级）
             "user": [] // 可免验证参加的用户
-        }
+        },
+        ...
     ]
 }
 ```
@@ -736,6 +744,8 @@ GET http://127.0.0.1:8000/api/prm/tag/1/
 `/api/train/training/{id}/` `GET`
 
 ::: details 接口使用
+
+使用 Training 的 `id` 来获取比赛练习详情。
 
 ```text
 GET http://127.0.0.1:8000/api/train/training/1/
@@ -830,6 +840,14 @@ GET http://127.0.0.1:8000/api/train/training/1/
 GET http://127.0.0.1:8000/api/train/rank/1/
 ```
 
+**Filter Parameter 支持参数**
+
+| 参数                                       | 对应实体字段            | 排序字段                         |
+| ------------------------------------------ | ----------------------- | -------------------------------- |
+| statistics 字段中的 score                  | TrainingRank.statistics | statistics__score                |
+| statistics 字段中的 statistics 下 Accepted | TrainingRank.statistics | statistics__statistics__Accepted |
+| statistics 字段中的 statistics 下 Commit   | TrainingRank.statistics | statistics__statistics__Commit   |
+
 成功返回 `200 OK` 。
 
 ```json
@@ -861,7 +879,8 @@ GET http://127.0.0.1:8000/api/train/rank/1/
                 }
             },
             "training": 1
-        }
+        },
+        ...
     ]
 }
 ```
@@ -879,6 +898,19 @@ GET http://127.0.0.1:8000/api/train/rank/1/
 ```text
 GET http://127.0.0.1:8000/api/train/sub/1/
 ```
+
+**Query Parameter 支持参数**
+
+| 参数     | 查询方式 | 对应实体字段          |
+| -------- | -------- | --------------------- |
+| 创建者   | 模糊查询 | Submission.created_by |
+| 问题题目 | 模糊查询 | Problem.title         |
+
+**Filter Parameter 支持参数**
+
+| 参数     | 对应实体字段            | 排序字段     |
+| -------- | ----------------------- | ------------ |
+| 提交时间 | Submission.created_time | created_time |
 
 成功返回 `200 OK` 。
 
@@ -899,7 +931,8 @@ GET http://127.0.0.1:8000/api/train/sub/1/
                 "title": "靶形数独"
             },
             "training": 1
-        }
+        },
+        ...
     ]
 }
 ```
@@ -908,9 +941,235 @@ GET http://127.0.0.1:8000/api/train/sub/1/
 
 #### 学习计划
 
+::: info 学习计划列表 - IsAuthenticatedOrReadOnly
+
+`/api/train/plan/` `GET`
+
+::: details 接口使用
+
+请求返回学习计划列表。
+
+**Query Parameter 支持参数**
+
+| 参数         | 查询方式 | 对应实体字段       |
+| ------------ | -------- | ------------------ |
+| 学习计划标题 | 模糊查询 | LearningPlan.title |
+
+**Filter Parameter 支持参数**
+
+| 参数     | 对应实体字段              | 排序字段     |
+| -------- | ------------------------- | ------------ |
+| 创建时间 | LearningPlan.created_time | created_time |
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "title": "C语言学习",
+            "description": "C语言学习，好好学习",
+            "created_time": "2023-03-26T20:13:16.650457",
+            "is_open": true,
+            "ordering": [
+                2,
+                1
+            ],
+            "created_by": null,
+            "stage": [
+                {
+                    "id": 1,
+                    "title": "C循环",
+                    "problems": [
+                        {
+                            "id": 1,
+                            "title": "循环",
+                            "difficulty": "Hard",
+                            "tags": [
+                                {
+                                    "id": 2,
+                                    "tag_name": "Test"
+                                },
+                                {
+                                    "id": 1,
+                                    "tag_name": "入门"
+                                }
+                            ],
+                            "statistics": {
+                                "Commit": 0,
+                                "Accepted": 0,
+                                "In Queue": 0,
+                                "Processing": 0,
+                                "Wrong Answer": 0,
+                                "Runtime Error": 0,
+                                "Internal Error": 0,
+                                "Compilation Error": 0,
+                                "Exec Format Error": 0,
+                                "Time Limit Exceeded": 0
+                            },
+                            "done": -1
+                        },
+                        ...
+                    ]
+                },
+                ...
+            ]
+        }
+    ]
+}
+```
+
+:::
+
+::: info 学习计划详情 - IsAuthenticatedOrReadOnly
+
+`/api/train/plan/{id}/` `GET`
+
+::: details 接口使用
+
+请求返回该学习计划详情。
+
+```text
+GET http://127.0.0.1:8000/api/train/plan/1/
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 1,
+    "title": "C语言学习",
+    "description": "C语言学习，好好学习",
+    "created_time": "2023-03-26T20:13:16.650457",
+    "is_open": true,
+    "ordering": [
+        2,
+        1
+    ],
+    "created_by": null,
+    "stage": [
+        {
+            "id": 1,
+            "title": "C循环",
+            "problems": [
+                {
+                    "id": 1,
+                    "title": "循环",
+                    "difficulty": "Hard",
+                    "tags": [
+                        {
+                            "id": 2,
+                            "tag_name": "Test"
+                        },
+                        {
+                            "id": 1,
+                            "tag_name": "入门"
+                        }
+                    ],
+                    "statistics": {
+                        "Commit": 0,
+                        "Accepted": 0,
+                        "In Queue": 0,
+                        "Processing": 0,
+                        "Wrong Answer": 0,
+                        "Runtime Error": 0,
+                        "Internal Error": 0,
+                        "Compilation Error": 0,
+                        "Exec Format Error": 0,
+                        "Time Limit Exceeded": 0
+                    },
+                    "done": -1
+                },
+                ...
+            ]
+        },
+        ...
+    ]
+}
+```
+
+:::
+
 ### Submission
 
 ### Announcement
+
+::: info 公告列表 - AllowAny
+
+`/api/ann/` `GET`
+
+::: details 接口使用
+
+请求返回不属于任何训练比赛的公告列表。
+
+**Query Parameter 支持参数**
+
+| 参数     | 查询方式 | 对应实体字段         |
+| -------- | -------- | -------------------- |
+| 公告标题 | 模糊查询 | Announcement.title   |
+| 公告内容 | 模糊查询 | Announcement.content |
+
+**Filter Parameter 支持参数**
+
+| 参数         | 对应实体字段              | 排序字段     |
+| ------------ | ------------------------- | ------------ |
+| 公告创建时间 | Announcement.created_time | created_time |
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 2,
+            "title": "比赛测试公告",
+            "content": "比赛测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告",
+            "created_time": "2023-03-26T19:43:22.762877",
+            "last_update_time": "2023-03-26T19:43:22.762891",
+            "training": null,
+            "created_by": "10010110"
+        },
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 公告详情 - IsAuthenticated
+
+`/api/ann/{id}/` `GET`
+
+::: details 接口使用
+
+请求返回不属于任何训练比赛的公告详情。
+
+```text
+GET http://127.0.0.1:8000/api/ann/2/
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 2,
+    "title": "比赛测试公告",
+    "content": "比赛测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告",
+    "created_time": "2023-03-26T19:43:22.762877",
+    "last_update_time": "2023-03-26T19:43:22.762891",
+    "training": null,
+    "created_by": "10010110"
+}
+```
+
+:::
 
 ## 后台接口
 
@@ -932,8 +1191,174 @@ GET http://127.0.0.1:8000/api/train/sub/1/
 
 #### 题集
 
+::: info 创建题集 - IsStaff
+
+`/api/train/admin/problem_set/` `POST`
+
+::: details 接口使用
+
+通过以下请求数据来创建题集。
+
+```json
+{
+    "title": "C循环",
+    "problems": [1, 2, 3] // 题目 ID，需要为空时使用 [] 代替
+}
+```
+
+成功返回 `201 Created` 。
+
+```json
+{
+    "id": 1,
+    "title": "C循环",
+    "problems": [
+        {
+            "id": 1,
+            "title": "循环",
+            "difficulty": "Hard",
+            "tags": [
+                {
+                    "id": 2,
+                    "tag_name": "Test"
+                },
+                {
+                    "id": 1,
+                    "tag_name": "入门"
+                }
+            ],
+            "statistics": {
+                "Commit": 0,
+                "Accepted": 0,
+                "In Queue": 0,
+                "Processing": 0,
+                "Wrong Answer": 0,
+                "Runtime Error": 0,
+                "Internal Error": 0,
+                "Compilation Error": 0,
+                "Exec Format Error": 0,
+                "Time Limit Exceeded": 0
+            },
+            "done": -1
+        },
+        ...
+    ]
+}
+```
+
+:::
+
 #### 比赛训练
 
 #### 学习计划
 
+::: info 创建学习计划 - IsStaff
+
+`/api/train/admin/plan/` `POST`
+
+::: details 接口使用
+
+通过以下请求数据来创建学习计划。
+
+```json
+{
+    "title": "C语言学习",
+    "description": "C语言学习，好好学习",
+    "is_open": true,
+    "stage": [1, 2], // 题集 ID
+    "ordering": [2, 1] // 题集顺序
+}
+```
+
+成功返回 `201 Created` 。
+
+```json
+{
+    "id": 1,
+    "title": "C语言学习",
+    "description": "C语言学习，好好学习",
+    "created_time": "2023-03-26T20:13:16.650457",
+    "is_open": true,
+    "ordering": [
+        2,
+        1
+    ],
+    "created_by": null,
+    "stage": [
+        {
+            "id": 1,
+            "title": "C循环",
+            "problems": [
+                {
+                    "id": 1,
+                    "title": "循环",
+                    "difficulty": "Hard",
+                    "tags": [
+                        {
+                            "id": 2,
+                            "tag_name": "Test"
+                        },
+                        {
+                            "id": 1,
+                            "tag_name": "入门"
+                        }
+                    ],
+                    "statistics": {
+                        "Commit": 0,
+                        "Accepted": 0,
+                        "In Queue": 0,
+                        "Processing": 0,
+                        "Wrong Answer": 0,
+                        "Runtime Error": 0,
+                        "Internal Error": 0,
+                        "Compilation Error": 0,
+                        "Exec Format Error": 0,
+                        "Time Limit Exceeded": 0
+                    },
+                    "done": -1
+                },
+                ...
+            ]
+        },
+        ...
+    ]
+}
+```
+
+:::
+
 ### Announcement
+
+::: info 创建公告 - IsStaff
+
+`/api/ann/admin/` `POST`
+
+::: details 接口使用
+
+通过以下请求数据来创建公告。
+
+```json
+{
+    "title": "比赛测试公告",
+    "content": "比赛测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告",
+    "visible": true,
+    "training": 1 // 归属于哪个训练比赛的公告，非必填
+}
+```
+
+成功返回 `201 Created` 。
+
+```json
+{
+    "id": 3,
+    "title": "比赛测试公告",
+    "content": "比赛测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告",
+    "created_time": "2023-03-26T19:53:58.807143",
+    "last_update_time": "2023-03-26T19:53:58.807158",
+    "visible": true,
+    "training": 1,
+    "created_by": "10010110"
+}
+```
+
+:::
