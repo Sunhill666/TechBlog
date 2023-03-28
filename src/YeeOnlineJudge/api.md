@@ -284,7 +284,7 @@ GET http://127.0.0.1:8000/api/org/user/1234567890000/
 
 ::: details 接口使用
 
-使用 `username` 来查看修改当前用户信息。
+使用 `username` 来修改当前用户信息。
 
 ```text
 PUT http://127.0.0.1:8000/api/org/user/1234567890000/
@@ -423,10 +423,10 @@ GET http://127.0.0.1:8000/api/org/rank/
 
 ```json
 {
-    "count": 3,  // 数据条目数量
-    "next": null, // 下一页链接
-    "previous": null,  // 上一页链接
-    "results": [  // 结果集
+    "count": 3,  // 数据条目数量。
+    "next": null, // 下一页链接。
+    "previous": null,  // 上一页链接。
+    "results": [  // 结果集。
         {
             "username": "10010110",
             "nickname": "",
@@ -543,7 +543,7 @@ GET http://127.0.0.1:8000/api/org/group/2/
                 "Exec Format Error": 0,
                 "Time Limit Exceeded": 0
             },
-            "done": -1 // 是否做过：1 做对；0 做错；-1 没做过
+            "done": -1 // 是否做过：1 做对；0 做错；-1 没做过。
         },
         ...
     ]
@@ -729,8 +729,8 @@ GET http://127.0.0.1:8000/api/prm/tag/1/
                 28,
                 29
             ],
-            "group": [], // 可免验证参加的组（班级）
-            "user": [] // 可免验证参加的用户
+            "group": [], // 可免验证参加的组（班级）。
+            "user": [] // 可免验证参加的用户。
         },
         ...
     ]
@@ -1096,6 +1096,195 @@ GET http://127.0.0.1:8000/api/train/plan/1/
 
 ### Submission
 
+::: info 支持语言列表 - AllowAny
+
+`/api/sub/language/` `GET`
+
+::: details 接口使用
+
+请求返回 OnlineJudge 所支持的提交语言。
+
+成功返回 `200 OK` 。
+
+```json
+{
+    // "language_id": "language_name"
+    "45": "Assembly (NASM 2.14.02)",
+    "46": "Bash (5.0.0)",
+    "47": "Basic (FBC 1.07.1)",
+    "75": "C (Clang 7.0.1)",
+    "76": "C++ (Clang 7.0.1)",
+    "48": "C (GCC 7.4.0)",
+    "52": "C++ (GCC 7.4.0)",
+    "49": "C (GCC 8.3.0)",
+    "53": "C++ (GCC 8.3.0)",
+    "50": "C (GCC 9.2.0)",
+    "54": "C++ (GCC 9.2.0)",
+    "86": "Clojure (1.10.1)",
+    "51": "C# (Mono 6.6.0.161)",
+    "77": "COBOL (GnuCOBOL 2.2)",
+    "55": "Common Lisp (SBCL 2.0.0)",
+    "56": "D (DMD 2.089.1)",
+    "57": "Elixir (1.9.4)",
+    "58": "Erlang (OTP 22.2)",
+    "44": "Executable",
+    "87": "F# (.NET Core SDK 3.1.202)",
+    "59": "Fortran (GFortran 9.2.0)",
+    "60": "Go (1.13.5)",
+    "88": "Groovy (3.0.3)",
+    "61": "Haskell (GHC 8.8.1)",
+    "62": "Java (OpenJDK 13.0.1)",
+    "63": "JavaScript (Node.js 12.14.0)",
+    "78": "Kotlin (1.3.70)",
+    "64": "Lua (5.3.5)",
+    "89": "Multi-file program",
+    "79": "Objective-C (Clang 7.0.1)",
+    "65": "OCaml (4.09.0)",
+    "66": "Octave (5.1.0)",
+    "67": "Pascal (FPC 3.0.4)",
+    "85": "Perl (5.28.1)",
+    "68": "PHP (7.4.1)",
+    "43": "Plain Text",
+    "69": "Prolog (GNU Prolog 1.4.5)",
+    "70": "Python (2.7.17)",
+    "71": "Python (3.8.1)",
+    "80": "R (4.0.0)",
+    "72": "Ruby (2.7.0)",
+    "73": "Rust (1.40.0)",
+    "81": "Scala (2.13.2)",
+    "82": "SQL (SQLite 3.27.2)",
+    "83": "Swift (5.2.3)",
+    "74": "TypeScript (3.7.4)",
+    "84": "Visual Basic.Net (vbnc 0.0.0.5943)"
+}
+```
+
+:::
+
+::: info 创建提交 - IsAuthenticatedOrReadOnly
+
+`/api/sub/submission/` `POST`
+
+::: details 接口使用
+
+通过以下请求数据来创建提交。
+
+```json
+{
+    "problem": 25,
+    "code": "while True:\n    try:\n        A = list(map(int, input().split(\" \")))\n        print(sum(A))\n    except:\n        break",
+    "language_id": 71,
+    "training": 1, // 如提交此字段，则为训练比赛提交，值为 Training 的 `id` ，非必填。
+}
+```
+
+成功返回 `201 Created` 。
+
+```json
+{
+    "id": 2,
+    "created_by": "root admin",
+    "token": [],
+    "code": "while True:\n    try:\n        A = list(map(int, input().split(\" \")))\n        print(sum(A))\n    except:\n        break",
+    "language_id": 71,
+    "status": "In Queue",
+    "created_time": "2023-03-27T22:06:21.736644",
+    "submit_ip": "39.154.0.251",
+    "problem": {
+        "id": 25,
+        "title": "靶形数独"
+    },
+    "training": null
+}
+```
+
+:::
+
+::: info 提交列表 - IsAuthenticatedOrReadOnly
+
+`/api/sub/submission/` `GET`
+
+::: details 接口使用
+
+请求返回不属于任何训练比赛的提交列表。
+
+**Query Parameter 支持参数**
+
+| 参数                | 查询方式 | 对应实体字段  |
+| ------------------- | -------- | ------------- |
+| 提交者的 `username` | 模糊查询 | User.username |
+| 题目标题            | 模糊查询 | Problem.title |
+
+**Filter Parameter 支持参数**
+
+| 参数     | 对应实体字段            | 排序字段     |
+| -------- | ----------------------- | ------------ |
+| 提交时间 | Submission.created_time | created_time |
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 2,
+            "created_by": "root admin",
+            "language_id": 71,
+            "status": "Accepted",
+            "created_time": "2023-03-27T22:06:21.736644",
+            "problem": {
+                "id": 25,
+                "title": "靶形数独"
+            },
+            "training": null
+        },
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 提交详情 - IsAuthenticatedOrReadOnly
+
+`/api/sub/submission/{sub_id}/` `GET`
+
+::: details 接口使用
+
+请求返回不属于任何训练比赛的提交详情。
+
+```text
+GET http://127.0.0.1:8000/api/sub/submission/2/
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 2,
+    "created_by": "root admin",
+    "token": [
+        "940254f7-58e9-4ae3-8cda-ed13b3a14ea3",
+        "10ed2967-bc99-462a-b44d-600c7a311965"
+    ],// 测试样例提交到 Judger 的 Token
+    "code": "while True:\n    try:\n        A = list(map(int, input().split(\" \")))\n        print(sum(A))\n    except:\n        break",
+    "language_id": 71,
+    "status": "Accepted",
+    "created_time": "2023-03-27T22:06:21.736644",
+    "submit_ip": "39.154.0.251",
+    "problem": {
+        "id": 25,
+        "title": "靶形数独"
+    },
+    "training": null
+}
+```
+
+:::
+
 ### Announcement
 
 ::: info 公告列表 - AllowAny
@@ -1177,7 +1366,528 @@ GET http://127.0.0.1:8000/api/ann/2/
 
 #### 用户
 
+::: info 添加用户 - IsSuperAdmin
+
+`/api/org/admin/user/` `POST`
+
+::: details 接口使用
+
+通过以下请求数据来添加用户。
+
+```json
+{
+    "username": "12345678",
+    "password": "12345678",
+    "nickname": "Pose站抽",
+    "email": "example@example.cn",
+    "user_role": "STU",
+    "user_permission": "NONE",
+    "is_staff": false,
+    "is_active": true,
+    "is_superuser": false,
+    "first_name": "四",
+    "last_name": "马",
+    "real_name": "马四",
+    "profile": {
+        "group": "test",
+        "bio": "在卡西餐"
+    }
+}
+```
+
+成功返回 `201 Created` 。
+
+```json
+{
+    "username": "12345678",
+    "profile": {
+        "group": {
+            "id": 2,
+            "name": "test"
+        },
+        "statistics": {
+            "Commit": 0,
+            "In Queue": 0,
+            "Processing": 0,
+            "Accepted": 0,
+            "Wrong Answer": 0,
+            "Time Limit Exceeded": 0,
+            "Compilation Error": 0,
+            "Runtime Error": 0,
+            "Internal Error": 0,
+            "Exec Format Error": 0
+        },
+        "avatar": "http://127.0.0.1:8000/media/avatar/default.jpg",
+        "bio": "在卡西餐"
+    },
+    "last_login": null,
+    "nickname": "Pose站抽",
+    "is_staff": false,
+    "is_active": true,
+    "is_superuser": false,
+    "real_name": "马四",
+    "email": "example@example.cn",
+    "user_role": "STU",
+    "user_permission": "NONE",
+    "date_joined": "2023-03-28T21:27:59.820464",
+    "last_login_ip": null
+}
+```
+
+:::
+
+::: info 用户列表 - IsSuperAdmin
+
+`/api/org/admin/user/` `GET`
+
+::: details 接口使用
+
+请求返回用户列表。
+
+**Query Parameter 支持参数**
+
+| 参数         | 查询方式 | 对应实体字段      |
+| ------------ | -------- | ----------------- |
+| 用户名       | 模糊查询 | User.username     |
+| 昵称         | 模糊查询 | User.nickname     |
+| 电子邮件     | 模糊查询 | User.email        |
+| 用户角色     | 模糊查询 | User.user_role    |
+| 是否工作人员 | 模糊查询 | User.is_staff     |
+| 是否超管     | 模糊查询 | User.is_superuser |
+
+**Filter Parameter 支持参数**
+
+| 参数     | 对应实体字段      | 排序字段    |
+| -------- | ----------------- | ----------- |
+| 用户名   | User.username     | username    |
+| 创建日期 | User.created_time | date_joined |
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "username": "10010110",
+            "nickname": "",
+            "email": "admin@moorlands.cn",
+            "user_role": "TEC",
+            "is_staff": true,
+            "is_superuser": true,
+            "profile": {
+                "group": {
+                    "id": 1,
+                    "name": "管理组"
+                },
+                "avatar": "http://127.0.0.1:8000/media/avatar/default.jpg"
+            }
+        },
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 用户详情 - IsSuperAdmin
+
+`/api/org/admin/user/{username}/` `GET`
+
+::: details 接口使用
+
+请求返回用户详情。
+
+```text
+GET http://127.0.0.1:8000/api/org/admin/user/10010110/
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "username": "10010110",
+    "profile": {
+        "group": {
+            "id": 1,
+            "name": "管理组"
+        },
+        "statistics": {
+            "Commit": 2,
+            "Accepted": 1,
+            "In Queue": 0,
+            "Processing": 0,
+            "Wrong Answer": 0,
+            "Runtime Error": 0,
+            "Internal Error": 0,
+            "Compilation Error": 0,
+            "Exec Format Error": 0,
+            "Time Limit Exceeded": 0
+        },
+        "avatar": "http://127.0.0.1:8000/media/avatar/default.jpg",
+        "bio": null
+    },
+    "last_login": "2023-03-27T22:06:19.280161",
+    "nickname": "",
+    "is_staff": true,
+    "is_active": true,
+    "is_superuser": true,
+    "real_name": "root admin",
+    "email": "admin@moorlands.cn",
+    "user_role": "TEC",
+    "user_permission": "ALL",
+    "date_joined": "2023-03-05T16:49:23.074555",
+    "last_login_ip": "39.154.0.251"
+}
+```
+
+:::
+
+::: info 修改用户 - IsSuperAdmin
+
+`/api/org/admin/user/{username}/` `PUT`
+
+::: details 接口使用
+
+使用 `username` 来修改用户信息。
+
+```text
+PUT http://127.0.0.1:8000/api/org/admin/user/12345678/
+```
+
+```json
+{
+    "username": "12345678",
+    "password": "123456789",
+    "profile": {
+        "group": "test",
+        "bio": "指南资讯"
+    },
+    "nickname": "最新跟单",
+    "is_staff": false,
+    "is_active": true,
+    "is_superuser": false,
+    "first_name": "五",
+    "last_name": "王",
+    "real_name": "王五",
+    "email": "examples@example.cn",
+    "user_role": "STU",
+    "user_permission": "NONE"
+}
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "username": "12345678",
+    "profile": {
+        "group": {
+            "id": 2,
+            "name": "test"
+        },
+        "statistics": {
+            "Commit": 0,
+            "Accepted": 0,
+            "In Queue": 0,
+            "Processing": 0,
+            "Wrong Answer": 0,
+            "Runtime Error": 0,
+            "Internal Error": 0,
+            "Compilation Error": 0,
+            "Exec Format Error": 0,
+            "Time Limit Exceeded": 0
+        },
+        "avatar": "http://127.0.0.1:8000/media/avatar/default.jpg",
+        "bio": "指南资讯"
+    },
+    "last_login": null,
+    "nickname": "最新跟单",
+    "is_staff": false,
+    "is_active": true,
+    "is_superuser": false,
+    "real_name": "王五",
+    "email": "examples@example.cn",
+    "user_role": "STU",
+    "user_permission": "NONE",
+    "date_joined": "2023-03-28T21:27:59.820464",
+    "last_login_ip": null
+}
+```
+
+:::
+
+::: info 修改用户 - IsSuperAdmin
+
+`/api/org/admin/user/{username}/` `PATCH`
+
+::: details 接口使用
+
+使用 `username` 来部分修改用户信息。
+
+```text
+PATCH http://127.0.0.1:8000/api/org/admin/user/12345678/
+```
+
+```json
+{
+    "password": "test1234321"
+}
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    {
+    "username": "12345678",
+    "profile": {
+        "group": {
+            "id": 2,
+            "name": "test"
+        },
+        "statistics": {
+            "Commit": 0,
+            "Accepted": 0,
+            "In Queue": 0,
+            "Processing": 0,
+            "Wrong Answer": 0,
+            "Runtime Error": 0,
+            "Internal Error": 0,
+            "Compilation Error": 0,
+            "Exec Format Error": 0,
+            "Time Limit Exceeded": 0
+        },
+        "avatar": "http://127.0.0.1:8000/media/avatar/default.jpg",
+        "bio": "指南资讯"
+    },
+    "last_login": "2023-03-28T21:47:06.693061",
+    "nickname": "最新跟单",
+    "is_staff": false,
+    "is_active": true,
+    "is_superuser": false,
+    "real_name": "王五",
+    "email": "examples@example.cn",
+    "user_role": "STU",
+    "user_permission": "NONE",
+    "date_joined": "2023-03-28T21:27:59.820464",
+    "last_login_ip": "220.195.74.195"
+}
+```
+
+:::
+
+::: info 删除用户 - IsSuperAdmin
+
+`/api/org/admin/user/{username}/` `DELETE`
+
+::: details 接口使用
+
+请求来删除用户。
+
+```text
+DELETE http://127.0.0.1:8000/api/org/admin/user/12345678/
+```
+
+成功返回 `204 No Content` 。
+
+:::
+
+::: info 批量添加用户 - IsSuperAdmin
+
+`/api/org/admin/userbatch/` `POST`
+
+::: details 接口使用
+
+通过以下请求数据来批量添加用户。
+
+```json
+{
+    "prefix": "v12",
+    "suffix": "q",
+    "user_num": 10,
+    "group": "BatchUser", // 不用提前创建
+    "output_file": true // 为 true 则返回 CSV 文件，反之返回 json 数据
+}
+```
+
+成功返回返回 CSV 文件或返回 json 数据。
+
+```json
+{
+    "detail": {
+        "v12_PIq9AOt_q": "n6GU1dxJSLJ3WxMo",
+        "v12_H3k7tMa_q": "RiwCurPsWJAEw1f8",
+        "v12_mGWf9Fd_q": "PifZySateUJelUb9",
+        "v12_75UnkUw_q": "tvTaQ0TeEcxIZvFh",
+        "v12_lqem1BD_q": "YuaFTcvkBzmHBR78",
+        "v12_KZaUhZq_q": "EOnaQtgWUkDROt7m",
+        "v12_Jw2K3qq_q": "M4TCUgt89QZkYMHC",
+        "v12_EOiOYSk_q": "HB8nkkwGmCLcOil3",
+        "v12_AU7zqdu_q": "ZIKPK6v4IEI48p1p",
+        "v12_Ir3Eq2R_q": "gW6Tc7McXVXHCRrN"
+    }
+}
+```
+
+:::
+
 #### 组（班级）
+
+::: info 创建组（班级） - IsSuperAdmin
+
+`/api/org/admin/group/` `POST`
+
+::: details 接口使用
+
+通过以下请求数据来创建组（班级）。
+
+```json
+{
+    "name": "test"
+}
+```
+
+成功返回 `201 Created` 。
+
+```json
+{
+    "id": 2,
+    "users": [],
+    "name": "test"
+}
+```
+
+:::
+
+::: info 组（班级）列表 - IsSuperAdmin
+
+`/api/org/admin/group/` `GET`
+
+::: details 接口使用
+
+请求返回组（班级）列表。
+
+**Query Parameter 支持参数**
+
+| 参数           | 查询方式 | 对应实体字段  |
+| -------------- | -------- | ------------- |
+| 组（班级）名称 | 模糊查询 | Group.name    |
+| 用户名         | 模糊查询 | User.username |
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "count": 3,
+    "next": null,
+    "previous": null,
+    "results": [
+        ...
+        {
+            "id": 3,
+            "users": [
+                {
+                    "user": "v12_PIq9AOt_q",
+                    "avatar": "http://127.0.0.1:8000/media/avatar/default.jpg"
+                },
+                ...
+            ],
+            "name": "BatchUser"
+        },
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 组（班级）详情 - IsSuperAdmin
+
+`/api/org/admin/group/{id}/` `GET`
+
+::: details 接口使用
+
+请求返回组（班级）详情。
+
+```text
+GET http://127.0.0.1:8000/api/org/admin/group/3/
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 3,
+    "users": [
+        {
+            "user": "v12_PIq9AOt_q",
+            "avatar": "http://127.0.0.1:8000/media/avatar/default.jpg"
+        },
+        ...
+    ],
+    "name": "BatchUser"
+}
+```
+
+:::
+
+::: info 修改组（班级） - IsSuperAdmin
+
+`/api/org/admin/group/{id}/` `PUT`
+
+::: details 接口使用
+
+使用 Group 的 `id` 来修改组（班级）信息。
+
+```text
+PUT http://127.0.0.1:8000/api/org/admin/group/3/
+```
+
+```json
+{
+    "name": "批量产生"
+}
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 3,
+    "users": [
+        {
+            "user": "v12_PIq9AOt_q",
+            "avatar": "http://127.0.0.1:8000/media/avatar/default.jpg"
+        },
+        ...
+    ],
+    "name": "批量产生"
+}
+```
+
+:::
+
+::: info 删除组（班级） - IsSuperAdmin
+
+`/api/org/admin/group/{id}/` `DELETE`
+
+::: details 接口使用
+
+请求来删除组（班级）。
+
+```text
+DELETE http://127.0.0.1:8000/api/org/admin/group/3/
+```
+
+成功返回 `204 No Content` 。
+
+::: warning
+1. 删除的组（班级）下存在用户则无法删除。
+
+:::
 
 ### Problem
 
