@@ -1641,7 +1641,6 @@ PATCH http://127.0.0.1:8000/api/org/admin/user/12345678/
 
 ```json
 {
-    {
     "username": "12345678",
     "profile": {
         "group": {
@@ -1884,18 +1883,802 @@ DELETE http://127.0.0.1:8000/api/org/admin/group/3/
 
 成功返回 `204 No Content` 。
 
-::: warning
-1. 删除的组（班级）下存在用户则无法删除。
-
+::: warning 删除的组（班级）下存在用户则无法删除。
 :::
 
 ### Problem
 
 #### 测试样例
 
-#### 题目
+::: info 上传测试样例 - IsStaff
+
+`/api/prm/admin/test_case/` `POST`
+
+::: details 接口使用
+
+使用 `form-data` 按以下字段来上传测试样例。
+
+| 字段名 | 样例参数 | 必填 | 说明         |
+| ------ | -------- | ---- | ------------ |
+| file   | FILE     | 是   | 测试样例文件 |
+
+成功返回 `201 Created` 。
+
+```json
+{
+    "id": 2,
+    "file": "http://127.0.0.1:8000/media/test_case/add-example1_aL2SWau.zip",
+    "created_time": "2023-03-29T21:58:58.072573",
+    "struct": [
+        {
+            "input_name": "1.in",
+            "output_name": "1.out"
+        },
+        {
+            "input_name": "2.in",
+            "output_name": "2.out"
+        }
+    ]
+}
+```
+
+::: warning
+
+请按以下目录结构打包测试样例，否则会验证错误，一个 `in` 对应一个 `out` 。
+
+```text
+add-example1
+├── 1.in
+├── 1.out
+├── 2.in
+└── 2.out
+```
+
+:::
+
+::: info 测试样例列表 - IsStaff
+
+`/api/prm/admin/test_case/` `GET`
+
+::: details 接口使用
+
+请求返回测试样例列表。
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "file": "http://127.0.0.1:8000/media/test_case/add-example1.zip",
+            "created_time": "2023-03-05T16:51:15.161915",
+            "struct": [
+                {
+                    "input_name": "1.in",
+                    "output_name": "1.out"
+                },
+                {
+                    "input_name": "2.in",
+                    "output_name": "2.out"
+                }
+            ]
+        },
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 删除测试样例 - IsStaff
+
+`/api/prm/admin/test_case/{id}/` `DELETE`
+
+::: details 接口使用
+
+请求来删除测试样例。
+
+```text
+DELETE http://127.0.0.1:8000/api/prm/admin/test_case/2/
+```
+
+成功返回 `204 No Content` 。
+
+::: warning 删除的测试样例有被题目所引用则无法删除。
+:::
 
 #### 题目标签
+
+::: info 添加题目标签 - IsStaff
+
+`/api/prm/admin/tag/` `POST`
+
+::: details 接口使用
+
+通过以下请求数据来添加题目标签。
+
+```json
+{
+    "tag_name": "入门"
+}
+```
+
+成功返回 `201 Created` 。
+
+```json
+{
+    "id": 1,
+    "tag_name": "入门"
+}
+```
+
+:::
+
+::: info 题目标签列表 - IsStaff
+
+`/api/prm/admin/tag/` `GET`
+
+::: details 接口使用
+
+请求返回题目标签列表。
+
+成功返回 `200 OK` ，默认按照 `tag_name` 排序。
+
+```json
+[
+    {
+        "id": 2,
+        "tag_name": "Test"
+    },
+    {
+        "id": 3,
+        "tag_name": "Tt"
+    },
+    {
+        "id": 1,
+        "tag_name": "入门"
+    }
+]
+```
+
+:::
+
+::: info 题目标签详情 - IsStaff
+
+`/api/prm/admin/tag/{id}/` `GET`
+
+::: details 接口使用
+
+请求返回题目标签详情。
+
+```text
+GET http://127.0.0.1:8000/api/prm/admin/tag/1/
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 1,
+    "tag_name": "入门"
+}
+```
+
+:::
+
+::: info 修改题目标签 - IsStaff
+
+`/api/prm/admin/tag/{id}/` `PUT`
+
+::: details 接口使用
+
+使用 ProblemTag 的 `id` 来修改题目标签。
+
+```text
+PUT http://127.0.0.1:8000/api/prm/admin/tag/3/
+```
+
+```json
+{
+    "tag_name": "balabala"
+}
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 3,
+    "tag_name": "balabala"
+}
+```
+
+:::
+
+::: info 删除题目标签 - IsStaff
+
+`/api/prm/admin/tag/{id}/` `DELETE`
+
+::: details 接口使用
+
+请求来删除题目标签。
+
+```text
+DELETE http://127.0.0.1:8000/api/prm/admin/tag/3/
+```
+
+成功返回 `204 No Content` 。
+
+:::
+
+#### 题目
+
+::: info 添加题目 - IsStaff
+
+`/api/prm/admin/problem/` `POST`
+
+::: details 接口使用
+
+通过以下请求数据来添加题目。
+
+```json
+{
+    "title": "求A+B的和",
+    "desc": "入门题目，给定a和b，求a+b的值",
+    "input_desc": "a为整数，b为整数",
+    "output_desc": "输出a+b的值",
+    "sample": [
+        {"input": "1 2\n3 4\n", "output": "3\n7\n"}, 
+        {"input": "0 2\n-1 4\n", "output": "2\n3\n"}
+    ],
+    "hint": "……",
+    "languages": [50, 54, 60, 62, 71],
+    "template": {
+        "62": "//PREPEND BEGIN\nimport java.util.Scanner;\n//PREPEND END\n\n//TEMPLATE BEGIN\nclass Solution {\n    public int add(int a, int b) {\n        return _________;\n    }\n}\n//TEMPLATE END\n\n//APPEND BEGIN\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        Solution solution = new Solution();\n        while (scanner.hasNext()) {\n            System.out.println(solution.add(scanner.nextInt(), scanner.nextInt()));\n        }\n    }\n}\n//APPEND END"
+    },
+    "time_limit": 4096,
+    "memory_limit": 48,
+    "difficulty": "Easy",
+    "mode": "OI",
+    "is_public": true,
+    "tags": [3, 2],
+    "source": "YeeOnlineJudge",
+    "visible": true,
+    "test_case": 1,
+    "point": [
+        {
+            "input_name": "1.in",
+            "output_name": "1.out",
+            "point": "100"
+        },
+        {
+            "input_name": "2.in",
+            "output_name": "2.out",
+            "point": "100"
+        }
+    ]
+}
+```
+
+成功返回 `201 Created` 。
+
+```json
+{
+    "id": 50,
+    "tags": [
+        {
+            "id": 2,
+            "tag_name": "Test"
+        },
+        {
+            "id": 3,
+            "tag_name": "balabala"
+        }
+    ],
+    "title": "求A+B的和",
+    "desc": "入门题目，给定a和b，求a+b的值",
+    "input_desc": "a为整数，b为整数",
+    "output_desc": "输出a+b的值",
+    "sample": [
+        {
+            "input": "1 2\n3 4\n",
+            "output": "3\n7\n"
+        },
+        {
+            "input": "0 2\n-1 4\n",
+            "output": "2\n3\n"
+        }
+    ],
+    "template": {
+        "62": "//PREPEND BEGIN\nimport java.util.Scanner;\n//PREPEND END\n\n//TEMPLATE BEGIN\nclass Solution {\n    public int add(int a, int b) {\n        return _________;\n    }\n}\n//TEMPLATE END\n\n//APPEND BEGIN\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        Solution solution = new Solution();\n        while (scanner.hasNext()) {\n            System.out.println(solution.add(scanner.nextInt(), scanner.nextInt()));\n        }\n    }\n}\n//APPEND END"
+    },
+    "hint": "……",
+    "languages": [
+        50,
+        54,
+        60,
+        62,
+        71
+    ],
+    "time_limit": 4096,
+    "memory_limit": 48,
+    "difficulty": "Easy",
+    "mode": "ACM",
+    "point": [
+        {
+            "input_name": "1.in",
+            "output_name": "1.out",
+            "point": "100"
+        },
+        {
+            "input_name": "2.in",
+            "output_name": "2.out",
+            "point": "100"
+        }
+    ],
+    "is_public": true,
+    "source": "YeeOnlineJudge",
+    "visible": true,
+    "created_time": "2023-04-03T21:50:48.850798",
+    "last_update_time": "2023-04-03T21:50:48.850813",
+    "statistics": {
+        "Commit": 0,
+        "In Queue": 0,
+        "Processing": 0,
+        "Accepted": 0,
+        "Wrong Answer": 0,
+        "Time Limit Exceeded": 0,
+        "Compilation Error": 0,
+        "Runtime Error": 0,
+        "Internal Error": 0,
+        "Exec Format Error": 0
+    },
+    "test_case": 1,
+    "created_by": "10010110"
+}
+```
+
+:::
+
+::: info 题目列表 - IsStaff
+
+`/api/prm/admin/problem/` `GET`
+
+::: details 接口使用
+
+请求返回题目列表。
+
+**Query Parameter 支持参数**
+
+| 参数     | 查询方式 | 对应实体字段        |
+| -------- | -------- | ------------------- |
+| 难度     | 精确查询 | Problem.difficulty  |
+| 题目标题 | 模糊查询 | Problem.title       |
+| 题目标签 | 模糊查询 | ProblemTag.tag_name |
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "count": 50,
+    "next": "http://127.0.0.1:8000/api/prm/admin/problem/?page=2",
+    "previous": null,
+    "results": [
+        ...
+        {
+            "id": 2,
+            "title": "谁拿了最多奖学金",
+            "difficulty": "Easy",
+            "tags": [
+                {
+                    "id": 2,
+                    "tag_name": "Test"
+                },
+                {
+                    "id": 1,
+                    "tag_name": "入门"
+                }
+            ],
+            "statistics": {
+                "Commit": 0,
+                "Accepted": 0,
+                "In Queue": 0,
+                "Processing": 0,
+                "Wrong Answer": 0,
+                "Runtime Error": 0,
+                "Internal Error": 0,
+                "Compilation Error": 0,
+                "Exec Format Error": 0,
+                "Time Limit Exceeded": 0
+            },
+            "done": -1
+        },
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 题目列表(简洁) - IsStaff
+
+`/api/prm/admin/problem/all/` `GET`
+
+::: details 接口使用
+
+请求返回题目列表的简洁信息。
+
+成功返回 `200 OK` 。
+
+```json
+[
+    ...
+    {
+        "id": 2,
+        "title": "谁拿了最多奖学金"
+    },
+    ...
+]
+```
+
+:::
+
+::: info 题目详情 - IsStaff
+
+`/api/prm/admin/problem/{id}/` `GET`
+
+::: details 接口使用
+
+请求返回题目详情。
+
+```text
+GET http://127.0.0.1:8000/api/prm/admin/problem/1/
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 1,
+    "tags": [
+        {
+            "id": 2,
+            "tag_name": "Test"
+        },
+        {
+            "id": 1,
+            "tag_name": "入门"
+        }
+    ],
+    "title": "循环",
+    "desc": "乐乐是一个聪明而又勤奋好学的孩子。他总喜欢探求事物的规律。一天，他突然对数的正整数次幂产生了兴趣。\n\n\n众所周知，$2$ 的正整数次幂最后一位数总是不断的在重复 $2,4,8,6,2,4,8,6…$ 我们说 $2$ 的正整数次幂最后一位的循环长度是 $4$（实际上 $4$ 的倍数都可以说是循环长度，但我们只考虑最小的循环长度）。类似的，其余的数字的正整数次幂最后一位数也有类似的循环现象：\n\n$$\n\\def\\arraystretch{1.5}\n\\begin{array}{c|c|c}\\hline\n\\textbf{数字}& \\textbf{循环} & \\textbf{循环长度} \\cr\\hline\\hline\n2 & 2,4,8,6 & 4\\cr\\hline\n3 & 3,9,7,1 & 4\\cr\\hline\n4 & 4,6 & 2\\cr\\hline\n5 & 5 &  1\\cr\\hline\n6 & 6 & 1\\cr\\hline\n7 & 7,9,3,1 & 4\\cr\\hline\n8 & 8,4,2,6 & 4\\cr\\hline\n9 & 9,1 & 2\\cr\\hline\n\\end{array}\n$$\n\n这时乐乐的问题就出来了：是不是只有最后一位才有这样的循环呢？对于一个整数 $n$ 的正整数次幂来说，它的后k位是否会发生循环？如果循环的话，循环长度是多少呢？\n\n注意：\n\n1. 如果 $n$ 的某个正整数次幂的位数不足 $k$，那么不足的高位看做是 $0$。\n2. 如果循环长度是 $L$，那么说明对于任意的正整数 $a$，$n$ 的 $a$ 次幂和 $a+L$ 次幂的最后 $k$ 位都相同。\n",
+    "input_desc": "共一行，包含 $2$ 个整数 $n$ 和 $k$。$n$ 和 $k$ 之间用一个空格隔开，表示要求 $n$ 的正整数次幂的最后 $k$ 位的循环长度。",
+    "output_desc": "一个整数，表示循环长度。如果循环不存在，输出 $-1$。",
+    "sample": [
+        {
+            "input": "32 2",
+            "output": "4"
+        }
+    ],
+    "template": {
+        "50": "//PREPEND BEGIN\n#include <stdio.h>\n//PREPEND END\n\n//TEMPLATE BEGIN\nint add(int a, int b) {\n  // Please fill this blank\n  return ___________;\n}\n//TEMPLATE END\n\n//APPEND BEGIN\nint main() {\n  printf(\"%d\", add(1, 2));\n  return 0;\n}\n//APPEND END",
+        "62": "//PREPEND BEGIN\nimport java.util.Scanner;\n//PREPEND END\n\n//TEMPLATE BEGIN\nclass Solution {\n    public int add(int a, int b) {\n        return _________;\n    }\n}\n//TEMPLATE END\n\n//APPEND BEGIN\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        Solution solution = new Solution();\n        while (scanner.hasNext()) {\n            System.out.println(solution.add(scanner.nextInt(), scanner.nextInt()));\n        }\n    }\n}\n//APPEND END"
+    },
+    "hint": "**【数据范围】**\n\n对于 $30 \\%$ 的数据，满足 $k \\le 4$；  \n对于$100 \\%$ 的数据，满足 $1 \\le n < {10}^{100}$，$1 \\le k \\le 100$。\n\n**【题目来源】**\n\nNOIP 2005 普及组第四题",
+    "languages": [
+        50,
+        54,
+        60,
+        62,
+        71
+    ],
+    "time_limit": 4096,
+    "memory_limit": 48,
+    "difficulty": "Hard",
+    "mode": "ACM",
+    "point": [
+        {
+            "point": "100",
+            "input_name": "1.in",
+            "output_name": "1.out"
+        },
+        {
+            "point": "100",
+            "input_name": "2.in",
+            "output_name": "2.out"
+        }
+    ],
+    "is_public": true,
+    "source": "YeeOnlineJudge",
+    "visible": true,
+    "created_time": "2023-03-05T16:51:16.126009",
+    "last_update_time": "2023-03-05T16:51:16.126024",
+    "statistics": {
+        "Commit": 0,
+        "Accepted": 0,
+        "In Queue": 0,
+        "Processing": 0,
+        "Wrong Answer": 0,
+        "Runtime Error": 0,
+        "Internal Error": 0,
+        "Compilation Error": 0,
+        "Exec Format Error": 0,
+        "Time Limit Exceeded": 0
+    },
+    "test_case": 1,
+    "created_by": "10010110"
+}
+```
+
+:::
+
+::: info 修改题目 - IsStaff
+
+`/api/prm/admin/problem/{id}/` `PUT`
+
+::: details 接口使用
+
+使用 Problem 的 `id` 来修改题目。
+
+```text
+PUT http://127.0.0.1:8000/api/prm/admin/problem/50/
+```
+
+```json
+{
+    "id": "50",
+    "tags": [1, 2],
+    "title": "循环",
+    "desc": "乐乐是一个聪明而又勤奋好学的孩子。他总喜欢探求事物的规律。一天，他突然对数的正整数次幂产生了兴趣。\n\n\n众所周知，$2$ 的正整数次幂最后一位数总是不断的在重复 $2,4,8,6,2,4,8,6…$ 我们说 $2$ 的正整数次幂最后一位的循环长度是 $4$（实际上 $4$ 的倍数都可以说是循环长度，但我们只考虑最小的循环长度）。类似的，其余的数字的正整数次幂最后一位数也有类似的循环现象：\n\n$$\n\\def\\arraystretch{1.5}\n\\begin{array}{c|c|c}\\hline\n\\textbf{数字}& \\textbf{循环} & \\textbf{循环长度} \\cr\\hline\\hline\n2 & 2,4,8,6 & 4\\cr\\hline\n3 & 3,9,7,1 & 4\\cr\\hline\n4 & 4,6 & 2\\cr\\hline\n5 & 5 &  1\\cr\\hline\n6 & 6 & 1\\cr\\hline\n7 & 7,9,3,1 & 4\\cr\\hline\n8 & 8,4,2,6 & 4\\cr\\hline\n9 & 9,1 & 2\\cr\\hline\n\\end{array}\n$$\n\n这时乐乐的问题就出来了：是不是只有最后一位才有这样的循环呢？对于一个整数 $n$ 的正整数次幂来说，它的后k位是否会发生循环？如果循环的话，循环长度是多少呢？\n\n注意：\n\n1. 如果 $n$ 的某个正整数次幂的位数不足 $k$，那么不足的高位看做是 $0$。\n2. 如果循环长度是 $L$，那么说明对于任意的正整数 $a$，$n$ 的 $a$ 次幂和 $a+L$ 次幂的最后 $k$ 位都相同。\n",
+    "input_desc": "共一行，包含 $2$ 个整数 $n$ 和 $k$。$n$ 和 $k$ 之间用一个空格隔开，表示要求 $n$ 的正整数次幂的最后 $k$ 位的循环长度。",
+    "output_desc": "一个整数，表示循环长度。如果循环不存在，输出 $-1$。",
+    "sample": [
+        {
+            "input": "32 2",
+            "output": "4"
+        }
+    ],
+    "template": {
+        "50": "……",
+        "54": "……",
+        "62": "……"
+    },
+    "hint": "**【数据范围】**\n\n对于 $30 \\%$ 的数据，满足 $k \\le 4$；  \n对于$100 \\%$ 的数据，满足 $1 \\le n < {10}^{100}$，$1 \\le k \\le 100$。\n\n**【题目来源】**\n\nNOIP 2005 普及组第四题",
+    "languages": [
+        50,
+        54,
+        60,
+        62,
+        71
+    ],
+    "time_limit": 4096,
+    "memory_limit": 48,
+    "difficulty": "Hard",
+    "mode": "ACM",
+    "point": [
+        {
+            "input_name": "1.in",
+            "output_name": "1.out",
+            "point": "100"
+        },
+        {
+            "input_name": "2.in",
+            "output_name": "2.out",
+            "point": "100"
+        }
+    ],
+    "is_public": true,
+    "source": "YeeOnlineJudge",
+    "visible": true,
+    "test_case": 1
+}
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 50,
+    "tags": [
+        {
+            "id": 2,
+            "tag_name": "Test"
+        },
+        {
+            "id": 1,
+            "tag_name": "入门"
+        }
+    ],
+    "title": "循环",
+    "desc": "乐乐是一个聪明而又勤奋好学的孩子。他总喜欢探求事物的规律。一天，他突然对数的正整数次幂产生了兴趣。\n\n\n众所周知，$2$ 的正整数次幂最后一位数总是不断的在重复 $2,4,8,6,2,4,8,6…$ 我们说 $2$ 的正整数次幂最后一位的循环长度是 $4$（实际上 $4$ 的倍数都可以说是循环长度，但我们只考虑最小的循环长度）。类似的，其余的数字的正整数次幂最后一位数也有类似的循环现象：\n\n$$\n\\def\\arraystretch{1.5}\n\\begin{array}{c|c|c}\\hline\n\\textbf{数字}& \\textbf{循环} & \\textbf{循环长度} \\cr\\hline\\hline\n2 & 2,4,8,6 & 4\\cr\\hline\n3 & 3,9,7,1 & 4\\cr\\hline\n4 & 4,6 & 2\\cr\\hline\n5 & 5 &  1\\cr\\hline\n6 & 6 & 1\\cr\\hline\n7 & 7,9,3,1 & 4\\cr\\hline\n8 & 8,4,2,6 & 4\\cr\\hline\n9 & 9,1 & 2\\cr\\hline\n\\end{array}\n$$\n\n这时乐乐的问题就出来了：是不是只有最后一位才有这样的循环呢？对于一个整数 $n$ 的正整数次幂来说，它的后k位是否会发生循环？如果循环的话，循环长度是多少呢？\n\n注意：\n\n1. 如果 $n$ 的某个正整数次幂的位数不足 $k$，那么不足的高位看做是 $0$。\n2. 如果循环长度是 $L$，那么说明对于任意的正整数 $a$，$n$ 的 $a$ 次幂和 $a+L$ 次幂的最后 $k$ 位都相同。\n",
+    "input_desc": "共一行，包含 $2$ 个整数 $n$ 和 $k$。$n$ 和 $k$ 之间用一个空格隔开，表示要求 $n$ 的正整数次幂的最后 $k$ 位的循环长度。",
+    "output_desc": "一个整数，表示循环长度。如果循环不存在，输出 $-1$。",
+    "sample": [
+        {
+            "input": "32 2",
+            "output": "4"
+        }
+    ],
+    "template": {
+        "50": "……",
+        "54": "……",
+        "62": "……"
+    },
+    "hint": "**【数据范围】**\n\n对于 $30 \\%$ 的数据，满足 $k \\le 4$；  \n对于$100 \\%$ 的数据，满足 $1 \\le n < {10}^{100}$，$1 \\le k \\le 100$。\n\n**【题目来源】**\n\nNOIP 2005 普及组第四题",
+    "languages": [
+        50,
+        54,
+        60,
+        62,
+        71
+    ],
+    "time_limit": 4096,
+    "memory_limit": 48,
+    "difficulty": "Hard",
+    "mode": "ACM",
+    "point": [
+        {
+            "input_name": "1.in",
+            "output_name": "1.out",
+            "point": "100"
+        },
+        {
+            "input_name": "2.in",
+            "output_name": "2.out",
+            "point": "100"
+        }
+    ],
+    "is_public": true,
+    "source": "YeeOnlineJudge",
+    "visible": true,
+    "created_time": "2023-04-03T21:50:48.850798",
+    "last_update_time": "2023-04-03T22:20:57.642325",
+    "statistics": {
+        "Commit": 0,
+        "Accepted": 0,
+        "In Queue": 0,
+        "Processing": 0,
+        "Wrong Answer": 0,
+        "Runtime Error": 0,
+        "Internal Error": 0,
+        "Compilation Error": 0,
+        "Exec Format Error": 0,
+        "Time Limit Exceeded": 0
+    },
+    "test_case": 1,
+    "created_by": "10010110"
+}
+```
+
+:::
+
+::: info 修改题目 - IsStaff
+
+`/api/prm/admin/problem/{id}/` `PATCH`
+
+::: details 接口使用
+
+使用 Problem 的 `id` 来修改题目。
+
+```text
+PATCH http://127.0.0.1:8000/api/prm/admin/problem/50/
+```
+
+```json
+{
+    "mode": "OI",
+    "point": [
+        {
+            "input_name": "1.in",
+            "output_name": "1.out",
+            "point": "50"
+        },
+        {
+            "input_name": "2.in",
+            "output_name": "2.out",
+            "point": "50"
+        }
+    ]
+}
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 50,
+    "tags": [
+        {
+            "id": 2,
+            "tag_name": "Test"
+        },
+        {
+            "id": 1,
+            "tag_name": "入门"
+        }
+    ],
+    "title": "循环",
+    "desc": "乐乐是一个聪明而又勤奋好学的孩子。他总喜欢探求事物的规律。一天，他突然对数的正整数次幂产生了兴趣。\n\n\n众所周知，$2$ 的正整数次幂最后一位数总是不断的在重复 $2,4,8,6,2,4,8,6…$ 我们说 $2$ 的正整数次幂最后一位的循环长度是 $4$（实际上 $4$ 的倍数都可以说是循环长度，但我们只考虑最小的循环长度）。类似的，其余的数字的正整数次幂最后一位数也有类似的循环现象：\n\n$$\n\\def\\arraystretch{1.5}\n\\begin{array}{c|c|c}\\hline\n\\textbf{数字}& \\textbf{循环} & \\textbf{循环长度} \\cr\\hline\\hline\n2 & 2,4,8,6 & 4\\cr\\hline\n3 & 3,9,7,1 & 4\\cr\\hline\n4 & 4,6 & 2\\cr\\hline\n5 & 5 &  1\\cr\\hline\n6 & 6 & 1\\cr\\hline\n7 & 7,9,3,1 & 4\\cr\\hline\n8 & 8,4,2,6 & 4\\cr\\hline\n9 & 9,1 & 2\\cr\\hline\n\\end{array}\n$$\n\n这时乐乐的问题就出来了：是不是只有最后一位才有这样的循环呢？对于一个整数 $n$ 的正整数次幂来说，它的后k位是否会发生循环？如果循环的话，循环长度是多少呢？\n\n注意：\n\n1. 如果 $n$ 的某个正整数次幂的位数不足 $k$，那么不足的高位看做是 $0$。\n2. 如果循环长度是 $L$，那么说明对于任意的正整数 $a$，$n$ 的 $a$ 次幂和 $a+L$ 次幂的最后 $k$ 位都相同。\n",
+    "input_desc": "共一行，包含 $2$ 个整数 $n$ 和 $k$。$n$ 和 $k$ 之间用一个空格隔开，表示要求 $n$ 的正整数次幂的最后 $k$ 位的循环长度。",
+    "output_desc": "一个整数，表示循环长度。如果循环不存在，输出 $-1$。",
+    "sample": [
+        {
+            "input": "32 2",
+            "output": "4"
+        }
+    ],
+    "template": {
+        "50": "……",
+        "54": "……",
+        "62": "……"
+    },
+    "hint": "**【数据范围】**\n\n对于 $30 \\%$ 的数据，满足 $k \\le 4$；  \n对于$100 \\%$ 的数据，满足 $1 \\le n < {10}^{100}$，$1 \\le k \\le 100$。\n\n**【题目来源】**\n\nNOIP 2005 普及组第四题",
+    "languages": [
+        50,
+        54,
+        60,
+        62,
+        71
+    ],
+    "time_limit": 4096,
+    "memory_limit": 48,
+    "difficulty": "Hard",
+    "mode": "OI",
+    "point": [
+        {
+            "input_name": "1.in",
+            "output_name": "1.out",
+            "point": "50"
+        },
+        {
+            "input_name": "2.in",
+            "output_name": "2.out",
+            "point": "50"
+        }
+    ],
+    "is_public": true,
+    "source": "YeeOnlineJudge",
+    "visible": true,
+    "created_time": "2023-04-03T21:50:48.850798",
+    "last_update_time": "2023-04-03T22:38:59.827720",
+    "statistics": {
+        "Commit": 0,
+        "Accepted": 0,
+        "In Queue": 0,
+        "Processing": 0,
+        "Wrong Answer": 0,
+        "Runtime Error": 0,
+        "Internal Error": 0,
+        "Compilation Error": 0,
+        "Exec Format Error": 0,
+        "Time Limit Exceeded": 0
+    },
+    "test_case": 1,
+    "created_by": "10010110"
+}
+```
+
+:::
+
+::: info 删除题目 - IsStaff
+
+`/api/prm/admin/problem/{id}/` `DELETE`
+
+::: details 接口使用
+
+请求来删除题目。
+
+```text
+DELETE http://127.0.0.1:8000/api/prm/admin/problem/50/
+```
+
+成功返回 `204 No Content` 。
+
+:::
 
 ### Training
 
