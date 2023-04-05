@@ -4,8 +4,6 @@ icon: repo
 article: true
 ---
 
-**文档编写中**
-
 ## 认证接口
 
 ::: tip
@@ -1173,8 +1171,10 @@ GET http://127.0.0.1:8000/api/train/plan/1/
 {
     "problem": 25,
     "code": "while True:\n    try:\n        A = list(map(int, input().split(\" \")))\n        print(sum(A))\n    except:\n        break",
-    "language_id": 71,
+    "language_id": 71
+    /*
     "training": 1, // 如提交此字段，则为训练比赛提交，值为 Training 的 `id` ，非必填。
+    */
 }
 ```
 
@@ -1707,7 +1707,7 @@ DELETE http://127.0.0.1:8000/api/org/admin/user/12345678/
     "prefix": "v12",
     "suffix": "q",
     "user_num": 10,
-    "group": "BatchUser", // 不用提前创建
+    "group": "BatchUser", // 不用提前创建该组（班级）
     "output_file": true // 为 true 则返回 CSV 文件，反之返回 json 数据
 }
 ```
@@ -2562,7 +2562,7 @@ PUT http://127.0.0.1:8000/api/prm/admin/problem/50/
 
 ::: details 接口使用
 
-使用 Problem 的 `id` 来修改题目。
+使用 Problem 的 `id` 来部分修改题目。
 
 ```text
 PATCH http://127.0.0.1:8000/api/prm/admin/problem/50/
@@ -2741,7 +2741,641 @@ DELETE http://127.0.0.1:8000/api/prm/admin/problem/50/
 
 :::
 
+::: info 题集列表 - IsStaff
+
+`/api/train/admin/problem_set/` `GET`
+
+::: details 接口使用
+
+请求返回题集列表。
+
+**Query Parameter 支持参数**
+
+| 参数 | 查询方式 | 对应实体字段     |
+| ---- | -------- | ---------------- |
+| 标题 | 模糊查询 | ProblemSet.title |
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "title": "C循环",
+            "problems": [
+                ...
+                {
+                    "id": 2,
+                    "title": "谁拿了最多奖学金",
+                    "difficulty": "Easy",
+                    "tags": [
+                        {
+                            "id": 2,
+                            "tag_name": "Test"
+                        },
+                        {
+                            "id": 1,
+                            "tag_name": "入门"
+                        }
+                    ],
+                    "statistics": {
+                        "Commit": 0,
+                        "Accepted": 0,
+                        "In Queue": 0,
+                        "Processing": 0,
+                        "Wrong Answer": 0,
+                        "Runtime Error": 0,
+                        "Internal Error": 0,
+                        "Compilation Error": 0,
+                        "Exec Format Error": 0,
+                        "Time Limit Exceeded": 0
+                    },
+                    "done": -1
+                },
+                ...
+            ]
+        },
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 题集详情 - IsStaff
+
+`/api/train/admin/problem_set/{id}/` `GET`
+
+::: details 接口使用
+
+请求返回题集详情。
+
+```text
+GET http://127.0.0.1:8000/api/train/admin/problem_set/1/
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 1,
+    "title": "C循环",
+    "problems": [
+        ...
+        {
+            "id": 2,
+            "title": "谁拿了最多奖学金",
+            "difficulty": "Easy",
+            "tags": [
+                {
+                    "id": 2,
+                    "tag_name": "Test"
+                },
+                {
+                    "id": 1,
+                    "tag_name": "入门"
+                }
+            ],
+            "statistics": {
+                "Commit": 0,
+                "Accepted": 0,
+                "In Queue": 0,
+                "Processing": 0,
+                "Wrong Answer": 0,
+                "Runtime Error": 0,
+                "Internal Error": 0,
+                "Compilation Error": 0,
+                "Exec Format Error": 0,
+                "Time Limit Exceeded": 0
+            },
+            "done": -1
+        },
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 修改题集 - IsStaff
+
+`/api/train/admin/problem_set/{id}/` `PUT`
+
+::: details 接口使用
+
+使用 ProblemSet 的 `id` 来修改题集。
+
+```text
+PUT http://127.0.0.1:8000/api/train/admin/problem_set/2/
+```
+
+```json
+{
+    "title": "修改后",
+    "problems": [1]
+}
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 2,
+    "title": "修改后",
+    "problems": [
+        {
+            "id": 1,
+            "title": "循环",
+            "difficulty": "Hard",
+            "tags": [
+                {
+                    "id": 2,
+                    "tag_name": "Test"
+                },
+                {
+                    "id": 1,
+                    "tag_name": "入门"
+                }
+            ],
+            "statistics": {
+                "Commit": 0,
+                "Accepted": 0,
+                "In Queue": 0,
+                "Processing": 0,
+                "Wrong Answer": 0,
+                "Runtime Error": 0,
+                "Internal Error": 0,
+                "Compilation Error": 0,
+                "Exec Format Error": 0,
+                "Time Limit Exceeded": 0
+            },
+            "done": -1
+        }
+    ]
+}
+```
+
+:::
+
+::: info 修改题集 - IsStaff
+
+`/api/train/admin/problem_set/{id}/` `PATCH`
+
+::: details 接口使用
+
+使用 ProblemSet 的 `id` 来部分修改题集。
+
+```text
+PATCH http://127.0.0.1:8000/api/train/admin/problem_set/2/
+```
+
+```json
+{
+    "title": "再修改"
+}
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 2,
+    "title": "再修改",
+    "problems": [
+        {
+            "id": 1,
+            "title": "循环",
+            "difficulty": "Hard",
+            "tags": [
+                {
+                    "id": 2,
+                    "tag_name": "Test"
+                },
+                {
+                    "id": 1,
+                    "tag_name": "入门"
+                }
+            ],
+            "statistics": {
+                "Commit": 0,
+                "Accepted": 0,
+                "In Queue": 0,
+                "Processing": 0,
+                "Wrong Answer": 0,
+                "Runtime Error": 0,
+                "Internal Error": 0,
+                "Compilation Error": 0,
+                "Exec Format Error": 0,
+                "Time Limit Exceeded": 0
+            },
+            "done": -1
+        }
+    ]
+}
+```
+
+:::
+
+::: info 删除题集 - IsStaff
+
+`/api/train/admin/problem_set/{id}/` `DELETE`
+
+::: details 接口使用
+
+请求来删除题集。
+
+```text
+DELETE http://127.0.0.1:8000/api/train/admin/problem_set/2/
+```
+
+成功返回 `204 No Content` 。
+
+:::
+
 #### 比赛训练
+
+::: info 创建比赛训练 - IsStaff
+
+`/api/train/admin/training/` `POST`
+
+::: details 接口使用
+
+通过以下请求数据来创建比赛训练。
+
+```json
+{
+    "title": "比赛#1",
+    "description": "比赛#1比赛#1比赛#1",
+    "is_open": true,
+    "start_time": "2023-3-2T12:00:00", 
+    "end_time": "2023-4-1T12:00:00",
+    "problems": [25, 26, 27, 28, 29],
+    "mode": "OI",
+    "password": "123456"
+    /*
+
+    "group": [1, 2],
+    "user": ["10010", "10086"]
+    
+    非必填，两参数分别为可免密参加比赛的组（班级）或用户，值分别为组（班级）id 和 username
+
+    */
+}
+```
+
+成功返回 `201 Created` 。
+
+```json
+{
+    "id": 2,
+    "group": [],
+    "user": [],
+    "title": "比赛#1",
+    "description": "比赛#1比赛#1比赛#1",
+    "created_time": "2023-04-05T12:44:17.927687",
+    "is_open": true,
+    "start_time": "2023-3-2T12:00:00",
+    "end_time": "2023-4-1T12:00:00",
+    "mode": "OI",
+    "created_by": "10010110",
+    "problems": [
+        ...
+        {
+            "id": 26,
+            "title": "质因数分解",
+            "difficulty": "Easy",
+            "tags": [
+                {
+                    "id": 2,
+                    "tag_name": "Test"
+                },
+                {
+                    "id": 1,
+                    "tag_name": "入门"
+                }
+            ],
+            "statistics": {
+                "Commit": 0,
+                "Accepted": 0,
+                "In Queue": 0,
+                "Processing": 0,
+                "Wrong Answer": 0,
+                "Runtime Error": 0,
+                "Internal Error": 0,
+                "Compilation Error": 0,
+                "Exec Format Error": 0,
+                "Time Limit Exceeded": 0
+            },
+            "done": -1
+        },
+        ...
+    ],
+    "announcement": []
+}
+```
+
+:::
+
+::: info 比赛训练列表 - IsStaff
+
+`/api/train/admin/training/` `GET`
+
+::: details 接口使用
+
+请求返回比赛训练列表。
+
+**Query Parameter 支持参数**
+
+| 参数 | 查询方式 | 对应实体字段   |
+| ---- | -------- | -------------- |
+| 标题 | 模糊查询 | Training.title |
+
+**Filter Parameter 支持参数**
+
+| 参数             | 对应实体字段          | 排序字段     |
+| ---------------- | --------------------- | ------------ |
+| 创建日期         | Training.created_time | created_time |
+| 比赛训练开始时间 | Training.start_time   | start_time   |
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 2,
+            "title": "比赛#1",
+            "created_time": "2023-04-05T12:44:17.927687",
+            "is_open": true,
+            "start_time": "2023-03-02T12:00:00",
+            "end_time": "2023-04-01T12:00:00",
+            "mode": "OI",
+            "created_by": "10010110",
+            "problems": [
+                25,
+                26,
+                27,
+                28,
+                29
+            ],
+            "group": [],
+            "user": []
+        },
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 比赛训练详情 - IsStaff
+
+`/api/train/admin/training/{id}/` `GET`
+
+::: details 接口使用
+
+请求返回比赛训练详情。
+
+```text
+GET http://127.0.0.1:8000/api/train/admin/training/1/
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 1,
+    "group": [],
+    "user": [],
+    "title": "比赛#1",
+    "description": "比赛#1比赛#1比赛#1",
+    "created_time": "2023-03-22T22:45:04.658970",
+    "is_open": true,
+    "start_time": "2023-03-02T12:00:00",
+    "end_time": "2023-04-01T12:00:00",
+    "mode": "OI",
+    "created_by": "10010110",
+    "problems": [
+        ...
+        {
+            "id": 26,
+            "title": "质因数分解",
+            "difficulty": "Easy",
+            "tags": [
+                {
+                    "id": 2,
+                    "tag_name": "Test"
+                },
+                {
+                    "id": 1,
+                    "tag_name": "入门"
+                }
+            ],
+            "statistics": {
+                "Commit": 0,
+                "Accepted": 0,
+                "In Queue": 0,
+                "Processing": 0,
+                "Wrong Answer": 0,
+                "Runtime Error": 0,
+                "Internal Error": 0,
+                "Compilation Error": 0,
+                "Exec Format Error": 0,
+                "Time Limit Exceeded": 0
+            },
+            "done": -1
+        },
+        ...
+    ],
+    "announcement": [
+        ...
+        {
+            "id": 1,
+            "title": "比赛测试公告",
+            "content": "比赛测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告",
+            "created_time": "2023-03-26T19:43:11.910721",
+            "last_update_time": "2023-03-26T19:43:11.910732",
+            "training": 1,
+            "created_by": "10010110"
+        },
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 修改比赛练习 - IsStaff
+
+`/api/train/admin/training/{id}/` `PUT`
+
+::: details 接口使用
+
+使用 Training 的 `id` 来修改比赛练习。
+
+```text
+PUT http://127.0.0.1:8000/api/train/admin/training/2/
+```
+
+```json
+{
+    "title": "比赛#1",
+    "description": "比赛#1比赛#1比赛#1",
+    "is_open": true,
+    "start_time": "2023-3-2T12:00:00", 
+    "end_time": "2023-4-1T12:00:00",
+    "problems": [25, 26, 28, 29],
+    "mode": "ACM",
+    "password": "125634"
+}
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 2,
+    "group": [],
+    "user": [],
+    "title": "比赛#1",
+    "description": "比赛#1比赛#1比赛#1",
+    "created_time": "2023-04-05T12:44:17.927687",
+    "is_open": true,
+    "start_time": "2023-3-2T12:00:00",
+    "end_time": "2023-4-1T12:00:00",
+    "mode": "ACM",
+    "created_by": "10010110",
+    "problems": [
+        ...
+        {
+            "id": 26,
+            "title": "质因数分解",
+            "difficulty": "Easy",
+            "tags": [
+                {
+                    "id": 2,
+                    "tag_name": "Test"
+                },
+                {
+                    "id": 1,
+                    "tag_name": "入门"
+                }
+            ],
+            "statistics": {
+                "Commit": 0,
+                "Accepted": 0,
+                "In Queue": 0,
+                "Processing": 0,
+                "Wrong Answer": 0,
+                "Runtime Error": 0,
+                "Internal Error": 0,
+                "Compilation Error": 0,
+                "Exec Format Error": 0,
+                "Time Limit Exceeded": 0
+            },
+            "done": -1
+        },
+        ...
+    ],
+    "announcement": []
+}
+```
+
+:::
+
+::: info 修改比赛练习 - IsStaff
+
+`/api/train/admin/training/{id}/` `PATCH`
+
+::: details 接口使用
+
+使用 Training 的 `id` 来部分修改比赛练习。
+
+```text
+PATCH http://127.0.0.1:8000/api/train/admin/training/2/
+```
+
+```json
+{
+    "title": "练习Test#1"
+}
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 2,
+    "group": [],
+    "user": [],
+    "title": "练习Test#1",
+    "description": "比赛#1比赛#1比赛#1",
+    "created_time": "2023-04-05T12:44:17.927687",
+    "is_open": true,
+    "start_time": "2023-3-2T12:00:00",
+    "end_time": "2023-4-1T12:00:00",
+    "mode": "ACM",
+    "created_by": "10010110",
+    "problems": [
+        ...
+        {
+            "id": 26,
+            "title": "质因数分解",
+            "difficulty": "Easy",
+            "tags": [
+                {
+                    "id": 2,
+                    "tag_name": "Test"
+                },
+                {
+                    "id": 1,
+                    "tag_name": "入门"
+                }
+            ],
+            "statistics": {
+                "Commit": 0,
+                "Accepted": 0,
+                "In Queue": 0,
+                "Processing": 0,
+                "Wrong Answer": 0,
+                "Runtime Error": 0,
+                "Internal Error": 0,
+                "Compilation Error": 0,
+                "Exec Format Error": 0,
+                "Time Limit Exceeded": 0
+            },
+            "done": -1
+        },
+        ...
+    ],
+    "announcement": []
+}
+```
+
+:::
+
+::: info 删除比赛训练 - IsStaff
+
+`/api/train/admin/training/{id}/` `DELETE`
+
+::: details 接口使用
+
+请求来删除比赛训练。
+
+```text
+DELETE http://127.0.0.1:8000/api/train/admin/training/2/
+```
+
+成功返回 `204 No Content` 。
+
+:::
 
 #### 学习计划
 
@@ -2820,6 +3454,336 @@ DELETE http://127.0.0.1:8000/api/prm/admin/problem/50/
 
 :::
 
+::: info 学习计划列表 - IsStaff
+
+`/api/train/admin/plan/` `GET`
+
+::: details 接口使用
+
+请求返回学习计划列表。
+
+**Query Parameter 支持参数**
+
+| 参数 | 查询方式 | 对应实体字段       |
+| ---- | -------- | ------------------ |
+| 标题 | 模糊查询 | LearningPlan.title |
+
+**Filter Parameter 支持参数**
+
+| 参数     | 对应实体字段              | 排序字段     |
+| -------- | ------------------------- | ------------ |
+| 创建日期 | LearningPlan.created_time | created_time |
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        ...
+        {
+            "id": 1,
+            "title": "C语言学习",
+            "description": "C语言学习，好好学习",
+            "created_time": "2023-03-26T20:13:16.650457",
+            "is_open": true,
+            "ordering": [
+                2,
+                1
+            ],
+            "created_by": null,
+            "stage": [
+                ...
+                {
+                    "id": 1,
+                    "title": "C循环",
+                    "problems": [
+                        ...
+                        {
+                            "id": 2,
+                            "title": "谁拿了最多奖学金",
+                            "difficulty": "Easy",
+                            "tags": [
+                                {
+                                    "id": 2,
+                                    "tag_name": "Test"
+                                },
+                                {
+                                    "id": 1,
+                                    "tag_name": "入门"
+                                }
+                            ],
+                            "statistics": {
+                                "Commit": 0,
+                                "Accepted": 0,
+                                "In Queue": 0,
+                                "Processing": 0,
+                                "Wrong Answer": 0,
+                                "Runtime Error": 0,
+                                "Internal Error": 0,
+                                "Compilation Error": 0,
+                                "Exec Format Error": 0,
+                                "Time Limit Exceeded": 0
+                            },
+                            "done": -1
+                        },
+                        ...
+                    ]
+                },
+                ...
+            ]
+        }
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 学习计划详情 - IsStaff
+
+`/api/train/admin/plan/` `GET`
+
+::: details 接口使用
+
+请求返回学习计划详情。
+
+```text
+GET http://127.0.0.1:8000/api/train/admin/plan/1/
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 1,
+    "title": "C语言学习",
+    "description": "C语言学习，好好学习",
+    "created_time": "2023-03-26T20:13:16.650457",
+    "is_open": true,
+    "ordering": [
+        2,
+        1
+    ],
+    "created_by": null,
+    "stage": [
+        {
+            "id": 1,
+            "title": "C循环",
+            "problems": [
+                ...
+                {
+                    "id": 2,
+                    "title": "谁拿了最多奖学金",
+                    "difficulty": "Easy",
+                    "tags": [
+                        {
+                            "id": 2,
+                            "tag_name": "Test"
+                        },
+                        {
+                            "id": 1,
+                            "tag_name": "入门"
+                        }
+                    ],
+                    "statistics": {
+                        "Commit": 0,
+                        "Accepted": 0,
+                        "In Queue": 0,
+                        "Processing": 0,
+                        "Wrong Answer": 0,
+                        "Runtime Error": 0,
+                        "Internal Error": 0,
+                        "Compilation Error": 0,
+                        "Exec Format Error": 0,
+                        "Time Limit Exceeded": 0
+                    },
+                    "done": -1
+                },
+                ...
+            ]
+        },
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 修改学习计划 - IsStaff
+
+`/api/train/admin/plan/{id}/` `PUT`
+
+::: details 接口使用
+
+使用 LearningPlan 的 `id` 来修改学习计划。
+
+```text
+PUT http://127.0.0.1:8000/api/train/admin/plan/2/
+```
+
+```json
+{
+    "title": "C语言学习",
+    "description": "学习C语言",
+    "is_open": true,
+    "stage": [1, 2],
+    "ordering": [1, 2]
+}
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 1,
+    "title": "C语言学习",
+    "description": "学习C语言",
+    "created_time": "2023-03-26T20:13:16.650457",
+    "is_open": true,
+    "ordering": [
+        1,
+        2
+    ],
+    "created_by": null,
+    "stage": [
+        {
+            "id": 1,
+            "title": "C循环",
+            "problems": [
+                ...
+                {
+                    "id": 2,
+                    "title": "谁拿了最多奖学金",
+                    "difficulty": "Easy",
+                    "tags": [
+                        {
+                            "id": 2,
+                            "tag_name": "Test"
+                        },
+                        {
+                            "id": 1,
+                            "tag_name": "入门"
+                        }
+                    ],
+                    "statistics": {
+                        "Commit": 0,
+                        "Accepted": 0,
+                        "In Queue": 0,
+                        "Processing": 0,
+                        "Wrong Answer": 0,
+                        "Runtime Error": 0,
+                        "Internal Error": 0,
+                        "Compilation Error": 0,
+                        "Exec Format Error": 0,
+                        "Time Limit Exceeded": 0
+                    },
+                    "done": -1
+                },
+                ...
+            ]
+        },
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 修改学习计划 - IsStaff
+
+`/api/train/admin/plan/{id}/` `PATCH`
+
+::: details 接口使用
+
+使用 LearningPlan 的 `id` 来部分修改学习计划。
+
+```text
+PATCH http://127.0.0.1:8000/api/train/admin/plan/2/
+```
+
+```json
+{
+    "title": "学习C语言"
+}
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 1,
+    "title": "学习C语言",
+    "description": "学习C语言",
+    "created_time": "2023-03-26T20:13:16.650457",
+    "is_open": true,
+    "ordering": [
+        1,
+        2
+    ],
+    "created_by": null,
+    "stage": [
+        {
+            "id": 1,
+            "title": "C循环",
+            "problems": [
+                ...
+                {
+                    "id": 2,
+                    "title": "谁拿了最多奖学金",
+                    "difficulty": "Easy",
+                    "tags": [
+                        {
+                            "id": 2,
+                            "tag_name": "Test"
+                        },
+                        {
+                            "id": 1,
+                            "tag_name": "入门"
+                        }
+                    ],
+                    "statistics": {
+                        "Commit": 0,
+                        "Accepted": 0,
+                        "In Queue": 0,
+                        "Processing": 0,
+                        "Wrong Answer": 0,
+                        "Runtime Error": 0,
+                        "Internal Error": 0,
+                        "Compilation Error": 0,
+                        "Exec Format Error": 0,
+                        "Time Limit Exceeded": 0
+                    },
+                    "done": -1
+                },
+                ...
+            ]
+        },
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 删除学习计划 - IsStaff
+
+`/api/train/admin/plan/{id}/` `DELETE`
+
+::: details 接口使用
+
+请求来删除学习计划。
+
+```text
+DELETE http://127.0.0.1:8000/api/train/admin/plan/1/
+```
+
+成功返回 `204 No Content` 。
+
+:::
+
 ### Announcement
 
 ::: info 创建公告 - IsStaff
@@ -2834,8 +3798,11 @@ DELETE http://127.0.0.1:8000/api/prm/admin/problem/50/
 {
     "title": "比赛测试公告",
     "content": "比赛测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告",
-    "visible": true,
-    "training": 1 // 归属于哪个训练比赛的公告，非必填
+    "visible": true
+    /*
+    "training": 1 // 归属于某个训练比赛的公告，非必填
+    */
+    
 }
 ```
 
@@ -2853,5 +3820,169 @@ DELETE http://127.0.0.1:8000/api/prm/admin/problem/50/
     "created_by": "10010110"
 }
 ```
+
+:::
+
+::: info 公告列表 - IsStaff
+
+`/api/ann/admin/` `GET`
+
+::: details 接口使用
+
+请求返回公告列表。
+
+**Query Parameter 支持参数**
+
+| 参数 | 查询方式 | 对应实体字段       |
+| ---- | -------- | ------------------ |
+| 标题 | 模糊查询 | Announcement.title |
+| 内容 | 模糊查询 | Announcement.content |
+
+**Filter Parameter 支持参数**
+
+| 参数     | 对应实体字段              | 排序字段     |
+| -------- | ------------------------- | ------------ |
+| 创建日期 | Announcement.created_time | created_time |
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "count": 3,
+    "next": null,
+    "previous": null,
+    "results": [
+        ...
+        {
+            "id": 2,
+            "title": "比赛测试公告",
+            "content": "比赛测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告",
+            "created_time": "2023-03-26T19:43:22.762877",
+            "last_update_time": "2023-03-26T19:43:22.762891",
+            "training": null,
+            "created_by": "10010110"
+        },
+        ...
+    ]
+}
+```
+
+:::
+
+::: info 公告详情 - IsStaff
+
+`/api/ann/admin/{id}/` `GET`
+
+::: details 接口使用
+
+请求返回公告详情。
+
+```text
+GET http://127.0.0.1:8000/api/ann/admin/1/
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 1,
+    "title": "比赛测试公告",
+    "content": "比赛测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告",
+    "created_time": "2023-03-26T19:43:11.910721",
+    "last_update_time": "2023-03-26T19:43:11.910732",
+    "visible": true,
+    "training": 1,
+    "created_by": "10010110"
+}
+```
+
+:::
+
+::: info 修改公告 - IsStaff
+
+`/api/ann/admin/{id}/` `PUT`
+
+::: details 接口使用
+
+使用 Announcement 的 `id` 来修改公告。
+
+```text
+PUT http://127.0.0.1:8000/api/ann/admin/1/
+```
+
+```json
+{
+    "title": "比赛测试公告",
+    "content": "比赛测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告修改",
+    "visible": true,
+    "training": null
+}
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 1,
+    "title": "比赛测试公告",
+    "content": "比赛测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告测试公告修改",
+    "created_time": "2023-03-26T19:43:11.910721",
+    "last_update_time": "2023-04-05T15:36:44.119462",
+    "visible": true,
+    "training": null,
+    "created_by": "10010110"
+}
+```
+
+:::
+
+::: info 修改公告 - IsStaff
+
+`/api/ann/admin/{id}/` `PATCH`
+
+::: details 接口使用
+
+使用 Announcement 的 `id` 来修改公告。
+
+```text
+PATCH http://127.0.0.1:8000/api/ann/admin/1/
+```
+
+```json
+{
+    "content": "修改公告测试公告测试公告测试公告测试公告测试公告测试公告修改"
+}
+```
+
+成功返回 `200 OK` 。
+
+```json
+{
+    "id": 1,
+    "title": "比赛测试公告",
+    "content": "修改公告测试公告测试公告测试公告测试公告测试公告测试公告修改",
+    "created_time": "2023-03-26T19:43:11.910721",
+    "last_update_time": "2023-04-05T15:37:46.312927",
+    "visible": true,
+    "training": null,
+    "created_by": "10010110"
+}
+```
+
+:::
+
+::: info 删除公告 - IsStaff
+
+`/api/ann/admin/{id}/` `DELETE`
+
+::: details 接口使用
+
+请求来删除公告。
+
+```text
+DELETE http://127.0.0.1:8000/api/ann/admin/1/
+```
+
+成功返回 `204 No Content` 。
 
 :::

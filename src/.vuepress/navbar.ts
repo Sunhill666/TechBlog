@@ -17,21 +17,6 @@ export const zhNavbar = navbar([
         icon: "engine",
         link: "/tutorials/ops/"
       },
-      {
-        text: "后端",
-        icon: "back-stage",
-        link: "/tutorials/backend/"
-      },
-      {
-        text: "文档",
-        icon: "article",
-        link: "/tutorials/docs/"
-      },
-      {
-        text: "其他",
-        icon: "others",
-        link: "/tutorials/others/"
-      },
     ]
   },
   { text: "随想", icon: "creative", link: "/impressions/README.md" },
