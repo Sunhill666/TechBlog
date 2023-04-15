@@ -1173,6 +1173,8 @@ GET http://127.0.0.1:8000/api/train/plan/1/
     "code": "while True:\n    try:\n        A = list(map(int, input().split(\" \")))\n        print(sum(A))\n    except:\n        break",
     "language_id": 71
     /*
+    "stdin": "1 2",
+    "expected_output": "3", // 此两项为测试提交，不计入提交列表，用于测试，都为非必填。
     "training": 1, // 如提交此字段，则为训练比赛提交，值为 Training 的 `id` ，非必填。
     */
 }

@@ -34,6 +34,10 @@ pip install -r requirements.txt
 
 ## 模块功能设计
 
+:::tip
+所有模型的主键默认为 `id` ，特殊情况将使用 `*` 标注。
+:::
+
 ### organization 模块
 
 #### 模型设计
@@ -46,35 +50,35 @@ pip install -r requirements.txt
 
 ##### Group 模型
 
-| 字段名称 | 字段类型  | 字段说明       |
-| -------- | --------- | -------------- |
-| name     | CharField | 组（班级）名称 |
+| 字段名称 | 字段类型  | 可为空 | 字段说明       |
+| -------- | --------- | ------ | -------------- |
+| name     | CharField | 否     | 组（班级）名称 |
 
 ##### User 模型 （*继承 `AbstractBaseUser` 类*）
 
-| 字段名称        | 字段类型              | 字段说明       |
-| --------------- | --------------------- | -------------- |
-| username        | CharField             | 工号/学号      |
-| nickname        | CharField             | 昵称           |
-| is_staff        | BooleanField          | 是否工作人员   |
-| is_active       | BooleanField          | 是否启用       |
-| is_superuser    | BooleanField          | 是否超级管理员 |
-| real_name       | CharField             | 真名           |
-| email           | EmailField            | 电子邮件       |
-| user_role       | CharField             | 用户角色       |
-| user_permission | CharField             | 用户权限       |
-| date_joined     | DateTimeField         | 加入时间       |
-| last_login_ip   | GenericIPAddressField | 最后登陆IP     |
+| 字段名称        | 字段类型              | 可为空 | 字段说明       |
+| --------------- | --------------------- | ------ | -------------- |
+| username*       | CharField             | 否     | 工号/学号      |
+| nickname        | CharField             | 否     | 昵称           |
+| is_staff        | BooleanField          | 否     | 是否工作人员   |
+| is_active       | BooleanField          | 否     | 是否启用       |
+| is_superuser    | BooleanField          | 否     | 是否超级管理员 |
+| real_name       | CharField             | 否     | 真名           |
+| email           | EmailField            | 否     | 电子邮件       |
+| user_role       | CharField             | 否     | 用户角色       |
+| user_permission | CharField             | 否     | 用户权限       |
+| date_joined     | DateTimeField         | 否     | 加入时间       |
+| last_login_ip   | GenericIPAddressField | 是     | 最后登陆IP     |
 
 ##### UserProfile 模型
 
-| 字段名称   | 字段类型      | 字段说明   |
-| ---------- | ------------- | ---------- |
-| user       | OneToOneField | 用户       |
-| group      | ForeignKey    | 组（班级） |
-| statistics | JSONField     | 提交数据   |
-| avatar     | ImageField    | 头像       |
-| bio        | CharField     | 格言       |
+| 字段名称   | 字段类型      | 可为空 | 字段说明   |
+| ---------- | ------------- | ------ | ---------- |
+| user       | OneToOneField | 否     | 用户       |
+| group      | ForeignKey    | 否     | 组（班级） |
+| statistics | JSONField     | 否     | 提交数据   |
+| avatar     | ImageField    | 否     | 头像       |
+| bio        | CharField     | 是     | 格言       |
 
 #### 功能设计
 
@@ -160,44 +164,44 @@ urlpatterns = [
 
 ##### ProblemTag 模型
 
-| 字段名称 | 字段类型  | 字段说明 |
-| -------- | --------- | -------- |
-| tag_name | CharField | 标签名称 |
+| 字段名称 | 字段类型  | 可为空 | 字段说明 |
+| -------- | --------- | ------ | -------- |
+| tag_name | CharField | 否     | 标签名称 |
 
 ##### TestCase 模型
 
-| 字段名称     | 字段类型      | 字段说明     |
-| ------------ | ------------- | ------------ |
-| file         | FileField     | 测试样例文件 |
-| created_time | DateTimeField | 创建日期     |
-| struct       | JSONField     | 测试样例结构 |
+| 字段名称     | 字段类型      | 可为空 | 字段说明     |
+| ------------ | ------------- | ------ | ------------ |
+| file         | FileField     | 否     | 测试样例文件 |
+| created_time | DateTimeField | 否     | 创建日期     |
+| struct       | JSONField     | 否     | 测试样例结构 |
 
 ##### Problem 模型
 
-| 字段名称         | 字段类型        | 字段说明         |
-| ---------------- | --------------- | ---------------- |
-| title            | CharField       | 题目标题         |
-| desc             | TextField       | 题目描述         |
-| input_desc       | TextField       | 输入描述         |
-| output_desc      | TextField       | 输出描述         |
-| sample           | JSONField       | 输入输出样例     |
-| template         | JSONField       | 模版             |
-| hint             | TextField       | 提示             |
-| languages        | JSONField       | 可提交的语言     |
-| time_limit       | IntegerField    | 时间限制         |
-| memory_limit     | IntegerField    | 内存限制         |
-| difficulty       | CharField       | 难度             |
-| mode             | CharField       | 模式             |
-| test_case        | ForeignKey      | 测试样例         |
-| point            | JSONField       | 分数             |
-| is_public        | BooleanField    | 前台用户是否可见 |
-| tags             | ManyToManyField | 题目标签         |
-| source           | CharField       | 题源             |
-| visible          | BooleanField    | 工作人员是否可见 |
-| created_time     | DateTimeField   | 创建时间         |
-| last_update_time | DateTimeField   | 最后更新时间     |
-| statistics       | JSONField       | 提交数据         |
-| created_by       | ForeignKey      | 创建者           |
+| 字段名称         | 字段类型        | 可为空 | 字段说明         |
+| ---------------- | --------------- | ------ | ---------------- |
+| title            | CharField       | 否     | 题目标题         |
+| desc             | TextField       | 否     | 题目描述         |
+| input_desc       | TextField       | 否     | 输入描述         |
+| output_desc      | TextField       | 否     | 输出描述         |
+| sample           | JSONField       | 是     | 输入输出样例     |
+| template         | JSONField       | 是     | 模版             |
+| hint             | TextField       | 是     | 提示             |
+| languages        | JSONField       | 否     | 可提交的语言     |
+| time_limit       | IntegerField    | 否     | 时间限制         |
+| memory_limit     | IntegerField    | 否     | 内存限制         |
+| difficulty       | CharField       | 否     | 难度             |
+| mode             | CharField       | 否     | 模式             |
+| test_case        | ForeignKey      | 否     | 测试样例         |
+| point            | JSONField       | 否     | 分数             |
+| is_public        | BooleanField    | 否     | 前台用户是否可见 |
+| tags             | ManyToManyField | 否     | 题目标签         |
+| source           | CharField       | 是     | 题源             |
+| visible          | BooleanField    | 否     | 工作人员是否可见 |
+| created_time     | DateTimeField   | 否     | 创建时间         |
+| last_update_time | DateTimeField   | 否     | 最后更新时间     |
+| statistics       | JSONField       | 否     | 提交数据         |
+| created_by       | ForeignKey      | 是     | 创建者           |
 
 #### 功能设计
 
@@ -319,47 +323,47 @@ class BaseProblemSerializer(serializers.ModelSerializer):
 
 ##### ProblemSet 模型
 
-| 字段名称 | 字段类型        | 字段说明       |
-| -------- | --------------- | -------------- |
-| title    | CharField       | 题集名称       |
-| problems | ManyToManyField | 题集所包含题目 |
+| 字段名称 | 字段类型        | 可为空 | 字段说明       |
+| -------- | --------------- | ------ | -------------- |
+| title    | CharField       | 否     | 题集名称       |
+| problems | ManyToManyField | 否     | 题集所包含题目 |
 
 ##### TrainingBase 模型 （*抽象类*）
 
-| 字段名称     | 字段类型      | 字段说明 |
-| ------------ | ------------- | -------- |
-| title        | CharField     | 标题     |
-| description  | TextField     | 描述     |
-| created_time | DateTimeField | 创建时间 |
-| is_open      | BooleanField  | 是否开启 |
-| created_by   | ForeignKey    | 创建者   |
+| 字段名称     | 字段类型      | 可为空 | 字段说明 |
+| ------------ | ------------- | ------ | -------- |
+| title        | CharField     | 否     | 标题     |
+| description  | TextField     | 否     | 描述     |
+| created_time | DateTimeField | 否     | 创建时间 |
+| is_open      | BooleanField  | 否     | 是否开启 |
+| created_by   | ForeignKey    | 是     | 创建者   |
 
 ##### Training 模型 （*继承 `TrainingBase` 类*）
 
-| 字段名称   | 字段类型        | 字段说明     |
-| ---------- | --------------- | ------------ |
-| start_time | DateTimeField   | 起始时间     |
-| end_time   | DateTimeField   | 结束时间     |
-| problems   | ManyToManyField | 题目         |
-| mode       | CharField       | 模式         |
-| group      | ManyToManyField | 可参加的组   |
-| user       | ManyToManyField | 可参加的用户 |
-| password   | CharField       | 密码         |
+| 字段名称   | 字段类型        | 可为空 | 字段说明     |
+| ---------- | --------------- | ------ | ------------ |
+| start_time | DateTimeField   | 否     | 起始时间     |
+| end_time   | DateTimeField   | 否     | 结束时间     |
+| problems   | ManyToManyField | 否     | 题目         |
+| mode       | CharField       | 否     | 模式         |
+| group      | ManyToManyField | 是     | 可参加的组   |
+| user       | ManyToManyField | 是     | 可参加的用户 |
+| password   | CharField       | 是     | 密码         |
 
 ##### LearningPlan 模型 （*继承 `TrainingBase` 类*）
 
-| 字段名称 | 字段类型        | 字段说明 |
-| -------- | --------------- | -------- |
-| stage    | ManyToManyField | 阶段     |
-| ordering | JSONField       | 顺序     |
+| 字段名称 | 字段类型        | 可为空 | 字段说明 |
+| -------- | --------------- | ------ | -------- |
+| stage    | ManyToManyField | 否     | 阶段     |
+| ordering | JSONField       | 否     | 顺序     |
 
 ##### TrainingRank 模型
 
-| 字段名称   | 字段类型   | 字段说明     |
-| ---------- | ---------- | ------------ |
-| user       | ForeignKey | 用户         |
-| training   | ForeignKey | 比赛         |
-| statistics | JSONField  | 训练比赛数据 |
+| 字段名称   | 字段类型   | 可为空 | 字段说明     |
+| ---------- | ---------- | ------ | ------------ |
+| user       | ForeignKey | 否     | 用户         |
+| training   | ForeignKey | 否     | 比赛         |
+| statistics | JSONField  | 否     | 训练比赛数据 |
 
 #### 功能设计
 
@@ -455,17 +459,19 @@ def training_verify(request):
 
 ##### Submission 模型
 
-| 字段名称     | 字段类型              | 字段说明                           |
-| ------------ | --------------------- | ---------------------------------- |
-| problem      | ForeignKey            | 提交题目                           |
-| token        | JSONField             | 每个测试样例提交到 Judge0 的 Token |
-| code         | TextField             | 提交代码                           |
-| language_id  | IntegerField          | 提交语言ID                         |
-| training     | ForeignKey            | 比赛或练习ID                       |
-| status       | CharField             | 提交状态                           |
-| created_time | DateTimeField         | 提交时间                           |
-| created_by   | ForeignKey            | 提交者                             |
-| submit_ip    | GenericIPAddressField | 提交IP                             |
+| 字段名称     | 字段类型              | 可为空 | 字段说明                           |
+| ------------ | --------------------- | ------ | ---------------------------------- |
+| problem      | ForeignKey            | 否     | 提交题目                           |
+| token        | JSONField             | 否     | 每个测试样例提交到 Judge0 的 Token |
+| code         | TextField             | 否     | 提交代码                           |
+| language_id  | IntegerField          | 否     | 提交语言ID                         |
+| training     | ForeignKey            | 是     | 比赛或练习ID                       |
+| time         | IntegerField          | 是     | 运行时间（ms）                     |
+| memory       | IntegerField          | 是     | 使用内存（kb）                     |
+| status       | CharField             | 否     | 提交状态                           |
+| created_time | DateTimeField         | 否     | 提交时间                           |
+| created_by   | ForeignKey            | 否     | 提交者                             |
+| submit_ip    | GenericIPAddressField | 否     | 提交IP                             |
 
 #### 功能设计
 
@@ -587,15 +593,15 @@ class BaseSubmissionSerializers(serializers.ModelSerializer):
 
 ##### Announcement 模型
 
-| 字段名称         | 字段类型      | 字段说明     |
-| ---------------- | ------------- | ------------ |
-| title            | CharField     | 标题         |
-| content          | TextField     | 内容         |
-| created_time     | DateTimeField | 创建时间     |
-| last_update_time | DateTimeField | 最后更新日期 |
-| training         | ForeignKey    | 比赛         |
-| created_by       | ForeignKey    | 创建者       |
-| visible          | BooleanField  | 是否可见     |
+| 字段名称         | 字段类型      | 可为空 | 字段说明     |
+| ---------------- | ------------- | ------ | ------------ |
+| title            | CharField     | 否     | 标题         |
+| content          | TextField     | 否     | 内容         |
+| created_time     | DateTimeField | 否     | 创建时间     |
+| last_update_time | DateTimeField | 是     | 最后更新日期 |
+| training         | ForeignKey    | 是     | 比赛         |
+| created_by       | ForeignKey    | 是     | 创建者       |
+| visible          | BooleanField  | 否     | 是否可见     |
 
 #### 功能设计
 
