@@ -8,13 +8,7 @@ article: true
 
 安装 [Docker Engine](https://docs.docker.com/engine/install/) 或 [Docker Desktop](https://docs.docker.com/engine/install/)
 
-## Docker Compose 部署（推荐）
-
-稍后补充
-
-## 手动部署
-
-### 部署判题机
+## 部署判题机
 
 1. 下载并解压判题机 Compose 文件
 
@@ -137,14 +131,77 @@ article: true
 
 4. 运行成功后判题机默认监听 `http://<your-server-ip-address>:2358`，访问 `http://<your-server-ip-address>` 查看判题机文档
 
-### YeeOnlineJudge 后端部署
+## Docker Compose 部署（推荐）
 
-1. Clone 项目到本地并切换分支
+1. Clone 项目到本地
 
     ```shell
     git clone https://github.com/Sunhill666/YeeOnlineJudge.git
     cd ./YeeOnlineJudge
-    git checkout -b alpha origin/alpha
+    ```
+
+2. 配置环境变量
+
+    ```text
+    # yeeoj.conf
+    AUTHN_HEADER=<judge0-AUTHN_HEADER>
+    AUTHN_TOKEN=<judge0-AUTHN_TOKEN> # 无则移除
+    AUTHZ_HEADER=<judge0-AUTHZ_HEADER>
+    AUTHZ_TOKEN=<judge0-AUTHZ_TOKEN> # 无则移除
+    CURRENT_ENV=prod
+    JUDGE_HOST=<JUDGE_HOST> # 默认填判题机 `docker-compose.yml` 服务名称，即 `server`
+    JUDGE_PORT=<JUDGE_PORT>
+    JUDGE_SSL=true # 是否使用 https 与判题机通信
+    POSTGRES_DB=<db-name>
+    POSTGRES_HOST=<db-host>
+    POSTGRES_PASSWORD=<db-password>
+    POSTGRES_PORT=<db-port>
+    POSTGRES_USER=<db-user>
+    REDIS_HOST=<redis-host>
+    REDIS_PORT=<redis-port>
+    REDIS_PASSWORD=<redis-password>
+    ```
+
+    参考
+
+    ```text
+    AUTHN_HEADER=X-Auth-Token
+    AUTHN_TOKEN=your-authn-token
+    AUTHZ_HEADER=X-Auth-User
+    AUTHZ_TOKEN=your-authz-token
+    CURRENT_ENV=prod
+    JUDGE_HOST=server
+    JUDGE_PORT=2358
+    JUDGE_SSL=false
+    POSTGRES_DB=oj_db
+    POSTGRES_HOST=oj_postgres
+    POSTGRES_PASSWORD=your-db-password
+    POSTGRES_PORT=5432
+    POSTGRES_USER=your-db-user
+    REDIS_HOST=oj_redis
+    REDIS_PASSWORD=your-redis-password
+    REDIS_PORT=6379
+    ```
+
+3. 部署 YeeOnlineJudge 后端服务
+
+    ```shell
+    docker-compose up -d
+    ```
+
+    ::: warning
+    如修改了判题机所在的 Docker Network，务必修改 YeeOnlineJudge 中 `docker-compose.yml` 的 `network` 配置项。
+    :::
+
+4. 启动成功后服务端监听 `8000` 端口，使用 `docker ps -a` 查看容器运行状况
+
+## 手动部署
+
+1. Clone 项目到本地
+
+    ```shell
+    git clone https://github.com/Sunhill666/YeeOnlineJudge.git
+    cd ./YeeOnlineJudge
     ```
 
 2. 安装依赖
