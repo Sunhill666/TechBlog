@@ -134,17 +134,17 @@ The input to the network is the detection instances from the frame pair of $F_t$
 For the object (shown in black bounding box) in the current frame (i.e., $Frame_t$), the associated object cannot be found in the adjacent frames. This is due to the other object occlusion (i.e., yellow bounding box in the $Frame_{t - 10}$). The algorithm tracks backward with decreasing time, associated object is identified in the $Frame_{t - 20}$.
 
 对于当前帧（即 $Frame_t$）中的对象（显示在黑色边界框中），在相邻帧中找不到关联的对象。这是由于其他对象遮挡（即$Frame_{t - 10}$中的黄色边界框）造成的。该算法随着时间的减少向后跟踪，在 $Frame_{t - 20}$ 中标识相关联的对象。
-![Fig. 10](/images/Fig10.png)
+![Fig. 10](/images/Multi-object-tracking-via-deep-feature-fusion-and-association-analysis/Fig10.png)
 
 A new column and a new row are added to the association matrix $M$. Here, the newly added column indicates that the tracking object enters the current frame and new association $M_1$ is generated; and the newly added row indicates that the tracking object has left the current frame and new association $M_2$ is generated. Subsequently, the row object association probability matrix $A_1$ and the column object association probability matrix $A_2$ are obtained by the row and column classifiers, respectively; and the association probability between each object in the two frames is preliminarily estimated.
 
 向关联矩阵 $M$ 添加新列和新行。这里，新添加的列是跟踪对象进入当前帧并且生成新的关联矩阵 $M_1$ ；并且新添加的行是跟踪对象已经离开当前帧并且生成新的关联矩阵 $M_2$。随后，行和列分类器分别获得行对象关联概率矩阵 $A_1$ 和列对象关联概率矩阵 $A_2$，并且初步估计两帧中每个对象之间的关联概率。
-![Fig. 11](/images/Fig11.png)
+![Fig. 11](/images/Multi-object-tracking-via-deep-feature-fusion-and-association-analysis/Fig11.png)
 
 When the tracked object is occluded for a long time, correct association is not likely to be successful. The failure is because object 2 has been occluded for a long time (from $t$ − 20 frame to $t$ + 20 frame) from disappearing to reappearing.
 
 当被跟踪对象被长时间遮挡时，正确的关联不太可能成功。失败是因为对象2被遮挡了很长时间（从$t$−20帧到$t$+20帧），从消失到重新出现。
-![Fig. 12](/images/Fig12.png)
+![Fig. 12](/images/Multi-object-tracking-via-deep-feature-fusion-and-association-analysis/Fig12.png)
 
 ### Loss function
 
