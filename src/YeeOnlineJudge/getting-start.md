@@ -2,6 +2,7 @@
 title: YeeOnlineJudge Getting Start
 icon: guide
 article: true
+isOriginal: true
 ---
 
 ## 准备工作

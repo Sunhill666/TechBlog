@@ -5,6 +5,7 @@ category:
   - ops
 tag:
   - SSH
+isOriginal: true
 ---
 
 ## Secure Shell (SSH)

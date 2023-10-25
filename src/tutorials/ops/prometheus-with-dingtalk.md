@@ -9,6 +9,7 @@ tag:
   - Grafana
   - 钉钉
   - Helm
+isOriginal: true
 ---
 
 ## 前期准备

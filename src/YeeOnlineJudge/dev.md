@@ -2,6 +2,7 @@
 title: YeeOnlineJudge 开发文档
 icon: tool
 article: true
+isOriginal: true
 ---
 
 此文档记录 YeeOnlineJudge 后端开发

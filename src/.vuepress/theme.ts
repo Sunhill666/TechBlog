@@ -23,7 +23,7 @@ export default hopeTheme({
   blog: {
     avatar: "/avatar.jpg",
     roundAvatar: true,
-    description: "个人开发者，计算机科学与技术专业准研一，研究方向为人工智能和机器学习",
+    description: "个人开发者，计算机科学与技术专业研一，研究方向为人工智能和机器学习",
     medias: {
       BiliBili: "https://space.bilibili.com/95746945",
       Email: "mailto:sunhilly@qq.com",
@@ -92,13 +92,16 @@ export default hopeTheme({
       imgLazyload: true,
       imgSize: true,
       include: true,
-      katex: true,
+      katex: {
+        copy: true,
+        mhchem: true,
+      },
       mark: true,
       mermaid: true,
       playground: {
         presets: ["ts", "vue"],
       },
-      presentation: {
+      revealjs: {
         plugins: ["highlight", "math", "search", "notes", "zoom"],
       },
       stylize: [

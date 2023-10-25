@@ -2,6 +2,7 @@
 title: YeeOnlineJudge 接口文档
 icon: repo
 article: true
+isOriginal: true
 ---
 
 ## 认证接口

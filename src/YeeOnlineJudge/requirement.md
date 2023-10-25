@@ -2,6 +2,7 @@
 title: YeeOnlineJudge 需求文档
 icon: result
 article: true
+isOriginal: true
 ---
 
 ## 项目概述
