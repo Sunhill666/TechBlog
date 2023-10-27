@@ -1,1 +1,0 @@
-import{_ as e}from"./plugin-vue_export-helper-c27b6911.js";import{o as t,c as o,a as c}from"./app-e72a71de.js";const n={},_=c("p",null,"这里并没有什么，可能以后会有什么，这只是个纪念碑，纪念这个博客的诞生。",-1),s=[_];function a(r,l){return t(),o("div",null,s)}const m=e(n,[["render",a],["__file","jan-1.html.vue"]]);export{m as default};
