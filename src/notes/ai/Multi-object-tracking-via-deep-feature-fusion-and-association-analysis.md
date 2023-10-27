@@ -1,6 +1,6 @@
 ---
 title: Multi-object tracking via deep feature fusion and association analysis
-date: 2023-01-31
+date: 2023-10-13
 category:
   - Machine Leaning
 tag:
@@ -9,11 +9,11 @@ tag:
 isOriginal: true
 ---
 
-> DOI: 10.1016/j.engappai.2023.106527
+> DOI: [10.1016/j.engappai.2023.106527](https://www.webofscience.com/wos/alldb/full-record/WOS:001028597000001)
 
 ## Abstract
 
-It first detects the objects of interest in each frame of the video, followed by identifying association with the object detected in the previous frame. A deep association network is described to perform object feature matching in the arbitrary two frames to infer association degree of objects, and then similarity matrix loss is used to calculate association between each object in different frames to achieve an accurate tracking. The novelty of the work lies in the design of a multi-scale fusion strategy by gradually concatenating sub-networks of low-resolution feature maps in parallel to the main network of high-resolution feature maps, in the construction of a deeper backbone network which can enhance the semantic information of object features, and in the use of a **siamese network** for training a pair of discontinuous frames.
+We describe a tracking-by-detection framework for multi-object tracking (MOT). ==It first detects the objects of interest in each frame of the video, followed by identifying association with the object detected in the previous frame. A deep association network is described to perform object feature matching in the arbitrary two frames to infer association degree of objects, and then similarity matrix loss is used to calculate association between each object in different frames to achieve an accurate tracking. The novelty of the work lies in the design of a multi-scale fusion strategy by gradually concatenating sub-networks of low-resolution feature maps in parallel to the main network of high-resolution feature maps, in the construction of a deeper backbone network which can enhance the semantic information of object features, and in the use of a **siamese network** for training a pair of discontinuous frames.== The main advantage of our framework is that it avoids missing detection and partial detection. It is particularly suitable for solving the problem of object ID switch caused by occlusion, entering and leaving of objects. Our method is evaluated and demonstrated on the publicly available MOT15, MOT16, MOT17 and MOT20 benchmark datasets. Compared with the state-of-the-art methods, our method achieves better tracking performance, and is therefore, more suited for MOT tasks.
 
 它首先在视频的每一帧中检测感兴趣的对象，然后识别与在前一帧中检测到的对象的关联。该方法利用深度关联网络在任意两帧中进行目标特征匹配，从而推断目标之间的关联度，然后利用相似度矩阵损失来计算不同帧中各目标之间的关联度，从而实现精确跟踪。该工作的创新之处在于设计了一种多尺度融合策略，通过逐步将低分辨率特征图子网络与高分辨率特征图主网络并行连接起来，构建更深层次的骨干网络来增强目标特征的语义信息，并使用孪生神经网络来训练一对不连续的帧。
 
