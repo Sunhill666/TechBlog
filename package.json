@@ -13,6 +13,7 @@
   "devDependencies": {
     "@vue/repl": "^2.5.8",
     "@vuepress/client": "2.0.0-beta.67",
+    "@vuepress/plugin-docsearch": "2.0.0-beta.67",
     "flowchart.ts": "^1.0.1",
     "katex": "^0.16.9",
     "markdown-it-multimd-table": "^4.2.3",
