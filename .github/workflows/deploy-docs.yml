@@ -37,9 +37,9 @@ jobs:
       - name: 构建文档
         env:
           NODE_OPTIONS: --max_old_space_size=8192
-          SEARCH_APPID: $ {{ secrets.SEARCH_APPID }}
-          SEARCH_API_KEY: $ {{ secrets.SEARCH_API_KEY }}
-          SEARCH_INDEX_NAME: $ {{ secrets.SEARCH_INDEX_NAME }}
+          SEARCH_APPID: ${{ secrets.SEARCH_APPID }}
+          SEARCH_API_KEY: ${{ secrets.SEARCH_API_KEY }}
+          SEARCH_INDEX_NAME: ${{ secrets.SEARCH_INDEX_NAME }}
         run: |-
           pnpm run docs:build
           > src/.vuepress/dist/.nojekyll
